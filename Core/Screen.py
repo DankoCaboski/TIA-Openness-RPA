@@ -19,7 +19,7 @@ if not os.path.exists(favico_path):
 
 # Criando a janela principal
 root = tk.Tk()
-root.geometry("600x400")
+root.geometry("700x500")
 root.iconbitmap(favico_path)
 root.title("RPA Tia Openness")
 

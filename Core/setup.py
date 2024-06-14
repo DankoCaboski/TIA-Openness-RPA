@@ -35,14 +35,13 @@ if sys.platform == "win32":
     base = "Win32GUI"
     
 target = Executable(
-    script="Screen.py",
     base=base,
+    script="Screen.py",
     icon="./Assets/favico.ico",
-    target_name="RPA_Tia_Openness.exe"
+    target_name="RPA Tia Openness.exe"
     )
 
 setup(
-    name="RPA Tia Openness",
     version="1.1.0",
     description="Interface for automated creation of TIA Portal projects using Openness API",
     options={"build_exe": build_exe_options},
