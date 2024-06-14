@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 
 from repositories import UserConfig, MlfbManagement
 from Controller.OpennessController import open_project, export_data_type, export_block
-from Services.OpennessService import add_DLL
+from Services.OpennessService import add_DLL, configurePath
 import os
 import Controller.OpennessController as OpennessController
 
@@ -47,7 +47,7 @@ def CreateProject():
         for linha in InfoHardware:
             devices.append({"HardwareType": linha["combobox"].get(), "Mlfb":linha["mlfb"].get(), "Name": linha["entry"].get()})   
         label_status_projeto.config(text="Criando projeto...")
-        status_criacao = OpennessController.create_project(project_dir, project_name, devices, rb_blocks_value, gp_blocks_value)
+        status_criacao = OpennessController.create_project(project_dir, project_name, devices, rb_blocks_value, gp_blocks_value,selec_blocks_value, dir_block)
         if status_criacao:
             label_status_projeto.config(text="Projeto criado com sucesso!")
         else:
@@ -72,6 +72,13 @@ def open_directory_dialog():
     
 def open_file_dialog():
     return filedialog.askopenfilename()
+
+def open_file_xml_dialog():
+    global dir_block
+    dir_block_config = filedialog.askopenfilename()
+    dir_block = configurePath(dir_block_config)
+    print(dir_block)
+    return dir_block
 
 def validate_all_device_names():
     names_seen = {}
@@ -167,9 +174,8 @@ mlfb_Plc = []
 mlfb_ihm = []
 mlfb_npde = []
 rb_blocks_value = 0
-rb_import_state = 0
 gp_blocks_value = 0
-gp_import_state = 0
+selec_blocks_value = 0
 
 mlfb_List=[mlfb_Plc, mlfb_ihm, mlfb_npde]
 
@@ -342,7 +348,7 @@ def import_blocks_screen():
     # Criando a janela
     import_config_frame = tk.Toplevel(root)
     import_config_frame.title("Configurações dos blocos")
-    import_config_frame.geometry("540x200")
+    import_config_frame.geometry("600x225")
 
     import_config_frame.transient(root)
     import_config_frame.grab_set()
@@ -385,7 +391,7 @@ def exportar_blocks_screen():
     
 
 def add_elements_to_frame(frame):
-    global entrada1rb, entrada2gp
+    global entrada1rb, entrada2gp, entrada3
     
     # Bloco do robô
     InstructionBlocks = tk.Label(frame, text="Quantidade de blocos do robô deseja importar?")
@@ -404,13 +410,25 @@ def add_elements_to_frame(frame):
     entrada2gp.insert(0, gp_blocks_value)  # Inserir o valor armazenado
     entrada2gp.grid(row=1, column=1, padx=2, pady=2)
 
+    # Bloco do selecionado 
+    InstructionBlocks2 = tk.Label(frame, text="Quantidade de blocos do grampo deseja importar?")
+    InstructionBlocks2.grid(row=2, column=0, padx=5, pady=5, sticky='w')
+
+    entrada3 = tk.Entry(frame)
+    entrada3.insert(0, selec_blocks_value)  # Inserir o valor armazenado
+    entrada3.grid(row=2, column=1, padx=2, pady=2)
+
+    dir_block_btn = tk.Button(frame, text="Selecionar o diretório", command= open_file_xml_dialog)
+    dir_block_btn.grid(row=2, column=2, padx=2, pady=2)
+
 
 def save_config(entrada1rb, entrada2gp, window):
-    global rb_blocks_value, gp_blocks_value
+    global rb_blocks_value, gp_blocks_value, selec_blocks_value
     
     # Atualizar as variáveis globais com os valores atuais
     rb_blocks_value = int(entrada1rb.get())
     gp_blocks_value = int(entrada2gp.get())
+    selec_blocks_value = int(entrada3.get())
     
     # Aqui você pode salvar esses dados em um arquivo, banco de dados, etc.
     with open("config_blocos.txt", "w") as file:

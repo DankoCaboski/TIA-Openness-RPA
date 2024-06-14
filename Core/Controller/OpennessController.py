@@ -7,7 +7,7 @@ RPA_status = "Idle"
 hardwareList = []
 myproject = None
 
-def create_project(project_path, project_name, hardware, rb_blocks_value, gp_blocks_value):
+def create_project(project_path, project_name, hardware, rb_blocks_value, gp_blocks_value, selec_blocks_value, dir_block):
     
     try:
         
@@ -40,6 +40,11 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, gp_blo
             for device in hardware:
                 deviceName = device["Name"]
                 import_block = OpennessService.verify_and_import(myproject, deviceName, r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\fc_falhas.xml", repetitions=gp_blocks_value, tipo= '')
+                print(import_block)
+        if selec_blocks_value > 0:
+            for device in hardware:
+                deviceName = device["Name"]
+                import_block = OpennessService.verify_and_import(myproject, deviceName, dir_block, repetitions=gp_blocks_value, tipo= '')
                 print(import_block)
 
         myproject.Save()
