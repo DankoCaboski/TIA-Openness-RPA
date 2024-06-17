@@ -356,9 +356,10 @@ def import_block(object, file_path):
             print(f"Importing block to CPU: {object}")
             plc_software = get_software(object)
             plc_software.BlockGroup.Blocks.Import(xml_file_info, import_options)
+            
         elif str(object.GetType()) == "Siemens.Engineering.SW.Blocks.PlcBlockComposition":
             print(f"Importing block to group: {object}")
-            object.Blocks.Import(xml_file_info, import_options)
+            object.Import(xml_file_info, import_options)
         return True
     except Exception as e:
         print('Error importing block:', e)
