@@ -351,6 +351,7 @@ def import_block(object, file_path):
     try:
         import_options = tia.ImportOptions.Override
         xml_file_info = get_file_info(file_path)
+        
         if str(object.GetType()) == "Siemens.Engineering.HW.DeviceImpl":
             object = object.DeviceItems[1]
             print(f"Importing block to CPU: {object}")
@@ -361,6 +362,7 @@ def import_block(object, file_path):
             print(f"Importing block to group: {object}")
             object.Import(xml_file_info, import_options)
         return True
+    
     except Exception as e:
         print('Error importing block:', e)
         return False
