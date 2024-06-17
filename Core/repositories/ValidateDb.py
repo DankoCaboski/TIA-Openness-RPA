@@ -11,7 +11,7 @@ def create_db():
     ddl_path = os.path.join(core_path, "Database", "ddl.sql")
     
     if not os.path.exists(db_path):
-        conexao = sqlite3.connect(r"\\AXIS-SERVER\Users\Axis Server\Documents\db")
+        conexao = sqlite3.connect(db_path)
         cursor = conexao.cursor()
         
         print(ddl_path)
