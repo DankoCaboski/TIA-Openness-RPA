@@ -79,7 +79,7 @@ def wire_profinet():
     global RPA_status
     
     ProfinetInterfaces = OpennessService.GetAllProfinetInterfaces(myproject)
-    RPA_status = "Nº de interfaces PROFINET:" + str(len(ProfinetInterfaces))
+    RPA_status = "Nº de interfaces PROFINET :" + str(len(ProfinetInterfaces))
     print(RPA_status)
     
     if len(ProfinetInterfaces) > 1:

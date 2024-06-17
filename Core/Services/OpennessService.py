@@ -122,7 +122,9 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject):
     try:
         if deviceType == "PLC":
             print('Creating CPU: ', deviceName)
-            config_Plc = "OrderNumber:"+deviceMlfb+"/V1.6"
+            # config_Plc = "OrderNumber:"+deviceMlfb+"/V1.6"
+            # Para fim de teste, retirar o mlfb fixo
+            config_Plc = "OrderNumber:6ES7 512-1SK01-0AB0/V2.5"
             deviceCPU = myproject.Devices.CreateWithItem(config_Plc, deviceName, deviceName)
             return deviceCPU
             
@@ -277,7 +279,7 @@ def SetSubnetName(myproject):
     return myproject.Subnets.Create("System:Subnet.Ethernet", "NewSubnet")
 
 
-def recursive_search(groups, group_name):
+def recursive_folder_search(groups, group_name):
     
     try:
         found = groups.Find(group_name)
@@ -285,7 +287,7 @@ def recursive_search(groups, group_name):
             return found
         
         for group in groups.GetEnumerator():
-            found = recursive_search(group.Groups, group_name)
+            found = recursive_folder_search(group.Groups, group_name)
             if found:
                 return found
     except Exception as e:
@@ -299,7 +301,7 @@ def create_group(device, group_name, parent_group):
         if not parent_group:
             return groups.Create(group_name)
         else:
-            return recursive_search(groups, parent_group).Groups.Create(group_name)
+            return recursive_folder_search(groups, parent_group).Groups.Create(group_name)
             
     except Exception as e:
         print('Error creating group:', e)
@@ -308,9 +310,9 @@ def create_group(device, group_name, parent_group):
 def import_data_type(cpu, data_type_path):
     try:
         types = get_types(cpu)
-        data_type_path = get_directory_info(data_type_path)
-        
-        types.Import(data_type_path, None, None)
+        data_type_path = get_file_info(data_type_path)
+        import_options = tia.ImportOptions.Override
+        types.Import(data_type_path, import_options)
     except Exception as e:
         print('Error importing data type:', e)
    
@@ -361,6 +363,7 @@ def import_block(object, file_path):
         elif str(object.GetType()) == "Siemens.Engineering.SW.Blocks.PlcBlockComposition":
             print(f"Importing block to group: {object}")
             object.Import(xml_file_info, import_options)
+            
         return True
     
     except Exception as e:
