@@ -294,9 +294,9 @@ def create_group(device, group_name, parent_group):
         plc_software = get_software(device)
         groups = plc_software.BlockGroup.Groups
         if not parent_group:
-            groups.Create(group_name)
+            return groups.Create(group_name)
         else:
-            recursive_search(groups, parent_group).Groups.Create(group_name)
+            return recursive_search(groups, parent_group).Groups.Create(group_name)
             
     except Exception as e:
         print('Error creating group:', e)
@@ -344,13 +344,18 @@ def export_data_type(device, data_type_name : str, data_type_path : str):
         print('Error exporting data type while in service:', e)
   
 # Função para importar os blocos de código para o software PLC
-def import_block(device, file_path):
+def import_block(object, file_path):
     try:
-        print(f"Importing block to CPU: {device}")
         import_options = tia.ImportOptions.Override
-        graphic_file_info = get_file_info(file_path)
-        plc_software = get_software(device)
-        plc_software.BlockGroup.Blocks.Import(graphic_file_info, import_options)
+        xml_file_info = get_file_info(file_path)
+        if str(object.GetType()) == "Siemens.Engineering.HW.DeviceImpl":
+            object = object.DeviceItems[1]
+            print(f"Importing block to CPU: {object}")
+            plc_software = get_software(object)
+            plc_software.BlockGroup.Blocks.Import(xml_file_info, import_options)
+        elif str(object.GetType()) == "Siemens.Engineering.SW.Blocks.PlcBlockComposition":
+            print(f"Importing block to group: {object}")
+            object.Blocks.Import(xml_file_info, import_options)
         return True
     except Exception as e:
         print('Error importing block:', e)
