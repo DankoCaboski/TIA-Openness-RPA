@@ -47,7 +47,7 @@ def CreateProject():
         for linha in InfoHardware:
             devices.append({"HardwareType": linha["combobox"].get(), "Mlfb":linha["mlfb"].get(), "Name": linha["entry"].get()})   
         label_status_projeto.config(text="Criando projeto...")
-        status_criacao = OpennessController.create_project(project_dir, project_name, devices, rb_blocks_value, gp_blocks_value,selec_blocks_value, dir_block)
+        status_criacao = OpennessController.create_project(project_dir, project_name, devices, rb_blocks_value, gp_blocks_value,selec_blocks_value)
         if status_criacao:
             label_status_projeto.config(text="Projeto criado com sucesso!")
         else:

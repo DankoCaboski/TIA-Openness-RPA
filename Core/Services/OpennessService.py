@@ -55,11 +55,11 @@ def compilate_item(to_compile):
         if state == "Success":
             RPA_status = "Compilation successful!"
             print(RPA_status)
-            return "Success"
+            return True
         else:
             RPA_status = "Compilation failed!"
             print(RPA_status)
-            return "Error"
+            return False
             # get_compilation_error_description(compiler_result.Messages)
             
     except Exception as e:
@@ -94,6 +94,9 @@ def get_device_by_index(myproject, index):
     cpu_list = get_all_devices(myproject)
     cpu = cpu_list[index]
     return cpu 
+
+def get_device_by_name(myproject, device_name):
+    return next((d for d in myproject.Devices if d.Name == device_name), None)
          
 def configurePath(path):
     return path.replace("/", "\\")
@@ -353,9 +356,10 @@ def import_block(object, file_path):
             print(f"Importing block to CPU: {object}")
             plc_software = get_software(object)
             plc_software.BlockGroup.Blocks.Import(xml_file_info, import_options)
+            
         elif str(object.GetType()) == "Siemens.Engineering.SW.Blocks.PlcBlockComposition":
             print(f"Importing block to group: {object}")
-            object.Blocks.Import(xml_file_info, import_options)
+            object.Import(xml_file_info, import_options)
         return True
     except Exception as e:
         print('Error importing block:', e)
@@ -402,8 +406,8 @@ def editar_tags_xml(arquivo, novo_nome, novo_numero):
 
 def verify_and_import(myproject, device_name, file_path, repetitions=0, tipo='' ):
     try:
-        # Verificar se o dispositivo existe no projeto
-        device = next((d for d in myproject.Devices if d.Name == device_name), None)
+        
+        device = get_device_by_name(myproject, device_name)
         
         if not device:
             print(f"Device {device_name} not found in the project.")
