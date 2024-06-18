@@ -264,12 +264,13 @@ def main_screen():
         load_image(root, r"./logo.png")
 
         root.mainloop()
-def set_version(version_select):
+def set_version(usr_config_screen, version_select):
     global selected_version 
     selected_version = version_select
     
     if add_DLL(selected_version):
         print(f"Versão {selected_version} configurada com sucesso.")
+        usr_config_screen.destroy()
     else:
         print(f"Falha ao configurar a versão {selected_version}.")
     return selected_version
@@ -297,15 +298,15 @@ def user_config_screen():
         dll_matrix.append(info_dll)
     
     # Tia V15.1
-    Btn151 = tk.Button(dll_config_frame, command=lambda: set_version(151), width=10, text="Tia V15.1")
+    Btn151 = tk.Button(dll_config_frame, command=lambda: set_version(usr_config_screen, 151), width=10, text="Tia V15.1")
     Btn151.grid(row=1, column=0, padx=5, pady=5)    
     
     # Tia V16
-    Btn16 = tk.Button(dll_config_frame, command=lambda: set_version(16), width=10, text="Tia V16")
+    Btn16 = tk.Button(dll_config_frame, command=lambda: set_version(usr_config_screen, 16), width=10, text="Tia V16")
     Btn16.grid(row=2, column=0, padx=5, pady=5)
     
     # Tia V17
-    Btn17 = tk.Button(dll_config_frame, command=lambda: set_version(17), width=10, text="Tia V17")
+    Btn17 = tk.Button(dll_config_frame, command=lambda: set_version(usr_config_screen, 17), width=10, text="Tia V17")
     Btn17.grid(row=3, column=0, padx=5, pady=5,)
     
     dll_config_frame.pack(padx=5, pady=5)
@@ -408,7 +409,7 @@ def add_elements_to_frame(frame):
 
 
     # Bloco do grampo
-    InstructionBlocks1 = tk.Label(frame, text="Quantidade de blocos do grampo deseja importar?")
+    InstructionBlocks1 = tk.Label(frame, text="Quantidade de blocos de mesa giratória deseja importar?")
     InstructionBlocks1.grid(row=1, column=0, padx=5, pady=5, sticky='w')
 
     entrada2gp = tk.Entry(frame)
