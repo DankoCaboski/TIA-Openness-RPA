@@ -4,6 +4,7 @@ from System.IO import DirectoryInfo, FileInfo  # type: ignore
 clr.AddReference('System.Collections')
 from System.Collections.Generic import List # type: ignore
 from repositories import UserConfig
+from Controller import LanguageController
 import re
 
 
@@ -307,14 +308,17 @@ def create_group(device, group_name, parent_group):
         print('Error creating group:', e)
 
 
-def import_data_type(cpu, data_type_path):
+def import_data_type(myproject, cpu, data_type_path):
     try:
         types = get_types(cpu)
         data_type_path = get_file_info(data_type_path)
         import_options = tia.ImportOptions.Override
         types.Import(data_type_path, import_options)
     except Exception as e:
-        print('Error importing data type:', e)
+        if str(e).__contains__("culture"):
+            LanguageController.add_language(myproject, "Português (Brasil)")
+        else:
+            print('Error importing data type:', e)
    
     
 def export_data_type(device, data_type_name : str, data_type_path : str):
