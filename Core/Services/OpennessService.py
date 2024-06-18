@@ -326,6 +326,7 @@ def import_data_type(myproject, cpu, data_type_path):
         if str(e).__contains__("culture"):
             LanguageController.add_language(myproject, "pt-BR")
             import_data_type(myproject, cpu, data_type_path)
+            
         else:
             print('Error importing data type from: ', data_type_path)
             print('Error message: ', e)
