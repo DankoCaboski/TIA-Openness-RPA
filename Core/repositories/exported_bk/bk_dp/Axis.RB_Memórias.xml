@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V16" />
+  <DocumentInfo>
+    <Created>2024-06-18T17:14:06.6356534Z</Created>
+    <ExportSetting>WithDefaults</ExportSetting>
+    <InstalledProducts>
+      <Product>
+        <DisplayName>Totally Integrated Automation Portal</DisplayName>
+        <DisplayVersion>V16</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>TIA Portal Version Control Interface</DisplayName>
+        <DisplayVersion>V16</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>TIA Portal Openness</DisplayName>
+        <DisplayVersion>V16</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>STEP 7 Professional</DisplayName>
+        <DisplayVersion>V16</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>STEP 7 Safety</DisplayName>
+        <DisplayVersion>V16</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>WinCC Advanced</DisplayName>
+        <DisplayVersion>V16</DisplayVersion>
+      </Product>
+    </InstalledProducts>
+  </DocumentInfo>
+  <SW.Types.PlcStruct ID="0">
+    <AttributeList>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v4">
+  <Section Name="None">
+    <Member Name="RB_Mem_Internas" Datatype="&quot;Axis.RB_Memórias_Internas&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute></AttributeList><Comment><MultiLanguageText Lang="pt-BR">Memórias Internas</MultiLanguageText></Comment><Sections><Section Name="None"><Member Name="RB_F_RS" Datatype="Bool" /><Member Name="RB_Prog_OK" Datatype="Bool" /><Member Name="RB_Aux_RST_P_OK" Datatype="Bool" /><Member Name="RB_Pulso_RST_P_OK" Datatype="Bool" /><Member Name="SA_G" Datatype="Bool" /><Member Name="SA_A" Datatype="Bool" /><Member Name="SA_P" Datatype="Bool" /><Member Name="Sts_Automatico" Datatype="Bool" /><Member Name="Sts_Manual" Datatype="Bool" /><Member Name="Sts_Falha" Datatype="Bool" /><Member Name="Nenhuma Chamada Ativa" Datatype="Bool" /><Member Name="RB_Mem_Prog_RB_Enviado" Datatype="Int" /><Member Name="RB_Mem_Prog_RB_Recebido" Datatype="Int" /></Section></Sections></Member>
+    <Member Name="RB_Mem_Externas" Datatype="&quot;Axis.RB_Memórias_Externas&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute></AttributeList><Comment><MultiLanguageText Lang="pt-BR">Memórias Externas</MultiLanguageText></Comment><Sections><Section Name="None"><Member Name="RB_Auxiliar_de_Programa" Datatype="Array[1..32] of Bool" /><Member Name="RB_Aux_Aut.Trabalho" Datatype="Array[1..32] of Bool" /><Member Name="RB_Aux_Aut.Intertravamento" Datatype="Array[1..32] of Bool" /><Member Name="RB_Aux_Rec.FimTrabalho" Datatype="Array[1..32] of Bool" /></Section></Sections></Member>
+  </Section>
+</Sections></Interface>
+      <IsFailsafeCompliant>false</IsFailsafeCompliant>
+      <Name>Axis.RB_Memórias</Name>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3" CompositionName="Items">
+            <AttributeList>
+              <Culture>pt-BR</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="4" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="5" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="6" CompositionName="Items">
+            <AttributeList>
+              <Culture>pt-BR</Culture>
+              <Text>Memorias do robô</Text>
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Types.PlcStruct>
+</Document>

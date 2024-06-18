@@ -34,7 +34,7 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, gp_blo
             for device in hardware:
                 deviceName = device["Name"]
                 device = OpennessService.get_device_by_name(myproject, deviceName)
-                RobotController.create_robot_structure(device, "nome_robo", "abb")
+                RobotController.create_robot_structure(myproject, device, "nome_robo", "abb")
                 
                 # tipo = 'robo'
                 # import_block = OpennessService.verify_and_import(myproject, deviceName, r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\db_falhas.xml", repetitions= rb_blocks_value, tipo = tipo)
@@ -79,7 +79,7 @@ def wire_profinet():
     global RPA_status
     
     ProfinetInterfaces = OpennessService.GetAllProfinetInterfaces(myproject)
-    RPA_status = "Nº de interfaces PROFINET:" + str(len(ProfinetInterfaces))
+    RPA_status = "Nº de interfaces PROFINET :" + str(len(ProfinetInterfaces))
     print(RPA_status)
     
     if len(ProfinetInterfaces) > 1:

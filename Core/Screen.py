@@ -73,12 +73,12 @@ def open_directory_dialog():
 def open_file_dialog():
     return filedialog.askopenfilename()
 
-def open_file_xml_dialog():
-    global dir_block
-    dir_block_config = filedialog.askopenfilename()
-    dir_block = configurePath(dir_block_config)
-    print(dir_block)
-    return dir_block
+# def open_file_xml_dialog():
+#     global dir_block
+#     dir_block_config = filedialog.askopenfilename()
+#     dir_block = configurePath(dir_block_config)
+#     print(dir_block)
+#     return dir_block
 
 def validate_all_device_names():
     names_seen = {}
@@ -353,7 +353,7 @@ def import_blocks_screen():
     # Criando a janela
     import_config_frame = tk.Toplevel(root)
     import_config_frame.title("Configurações dos blocos")
-    import_config_frame.geometry("600x225")
+    import_config_frame.geometry("600x360")
 
     import_config_frame.transient(root)
     import_config_frame.grab_set()
@@ -377,7 +377,7 @@ def import_blocks_screen():
 def exportar_blocks_screen():
     data_type_config_screen = tk.Toplevel(root)
     data_type_config_screen.title("Exprtar blocos")
-    data_type_config_screen.geometry("540x360")
+    data_type_config_screen.geometry("600x360")
     
     data_type_config_screen.transient(root)
     data_type_config_screen.grab_set()
@@ -422,10 +422,6 @@ def add_elements_to_frame(frame):
     entrada3 = tk.Entry(frame)
     entrada3.insert(0, selec_blocks_value)  # Inserir o valor armazenado
     entrada3.grid(row=2, column=1, padx=2, pady=2)
-
-    dir_block_btn = tk.Button(frame, text="Selecionar o diretório", command= open_file_xml_dialog)
-    dir_block_btn.grid(row=2, column=2, padx=2, pady=2)
-
 
 def save_config(entrada1rb, entrada2gp, window):
     global rb_blocks_value, gp_blocks_value, selec_blocks_value

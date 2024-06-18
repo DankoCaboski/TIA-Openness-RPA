@@ -4,6 +4,8 @@ from System.IO import DirectoryInfo, FileInfo  # type: ignore
 clr.AddReference('System.Collections')
 from System.Collections.Generic import List # type: ignore
 from repositories import UserConfig
+from Controller import LanguageController
+from . import UDTService
 import re
 
 
@@ -122,7 +124,9 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject):
     try:
         if deviceType == "PLC":
             print('Creating CPU: ', deviceName)
-            config_Plc = "OrderNumber:"+deviceMlfb+"/V1.6"
+            # config_Plc = "OrderNumber:"+deviceMlfb+"/V1.6"
+            # Para fim de teste, retirar o mlfb fixo
+            config_Plc = "OrderNumber:6ES7 512-1SK01-0AB0/V2.5"
             deviceCPU = myproject.Devices.CreateWithItem(config_Plc, deviceName, deviceName)
             return deviceCPU
             
@@ -276,7 +280,7 @@ def SetSubnetName(myproject):
     return myproject.Subnets.Create("System:Subnet.Ethernet", "NewSubnet")
 
 
-def recursive_search(groups, group_name):
+def recursive_folder_search(groups, group_name):
     
     try:
         found = groups.Find(group_name)
@@ -284,7 +288,7 @@ def recursive_search(groups, group_name):
             return found
         
         for group in groups.GetEnumerator():
-            found = recursive_search(group.Groups, group_name)
+            found = recursive_folder_search(group.Groups, group_name)
             if found:
                 return found
     except Exception as e:
@@ -298,20 +302,33 @@ def create_group(device, group_name, parent_group):
         if not parent_group:
             return groups.Create(group_name)
         else:
-            return recursive_search(groups, parent_group).Groups.Create(group_name)
+            return recursive_folder_search(groups, parent_group).Groups.Create(group_name)
             
     except Exception as e:
         print('Error creating group:', e)
 
 
-def import_data_type(cpu, data_type_path):
+def import_data_type(myproject, cpu, data_type_path):
     try:
-        types = get_types(cpu)
-        data_type_path = get_directory_info(data_type_path)
+        udts_dependentes = UDTService.list_udt_from_bk(data_type_path)
+        for udt in udts_dependentes:
+            udt_path = data_type_path.rsplit(".xml", 1)[0] + "\\" + udt + ".xml"
+            import_data_type(myproject, cpu, udt_path) 
         
-        types.Import(data_type_path, None, None)
+        types = get_types(cpu)
+        if type(data_type_path) == str:
+            data_type_path = get_file_info(data_type_path)
+        import_options = tia.ImportOptions.Override
+        types.Import(data_type_path, import_options)
+        
     except Exception as e:
-        print('Error importing data type:', e)
+        if str(e).__contains__("culture"):
+            LanguageController.add_language(myproject, "pt-BR")
+            import_data_type(myproject, cpu, data_type_path)
+            
+        else:
+            print('Error importing data type from: ', data_type_path)
+            print('Error message: ', e)
    
     
 def export_data_type(device, data_type_name : str, data_type_path : str):
@@ -350,6 +367,7 @@ def import_block(object, file_path):
     try:
         import_options = tia.ImportOptions.Override
         xml_file_info = get_file_info(file_path)
+        
         if str(object.GetType()) == "Siemens.Engineering.HW.DeviceImpl":
             object = object.DeviceItems[1]
             print(f"Importing block to CPU: {object}")
@@ -359,7 +377,9 @@ def import_block(object, file_path):
         elif str(object.GetType()) == "Siemens.Engineering.SW.Blocks.PlcBlockComposition":
             print(f"Importing block to group: {object}")
             object.Import(xml_file_info, import_options)
+            
         return True
+    
     except Exception as e:
         print('Error importing block:', e)
         return False
