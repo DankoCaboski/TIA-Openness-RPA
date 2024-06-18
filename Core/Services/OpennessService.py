@@ -126,11 +126,10 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject):
             deviceCPU = myproject.Devices.CreateWithItem(config_Plc, deviceName, deviceName)
             return deviceCPU
             
-        elif deviceType == "HMI":
-            RPA_status = 'Creating HMI: ', deviceName
-            print(RPA_status)
-            config_Hmi = 'OrderNumber:6AV2 124-0GC01-0AX0/15.1.0.0'
-            deviceHMI =  myproject.Devices.CreateWithItem(config_Hmi, deviceName, None)
+        elif deviceType == "IHM":
+            print('Creating IHM: ', deviceName)
+            config_Hmi = 'OrderNumber:'+deviceMlfb+'/12.0.0.0'
+            deviceHMI = myproject.Devices.CreateWithItem(config_Hmi, deviceName, None)
             return deviceHMI
 
         elif deviceType == "IO Node":
