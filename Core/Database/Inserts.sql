@@ -23,9 +23,27 @@ INSERT or IGNORE INTO VersoesHardware (mlfb, versao) VALUES
 ('6AV6 647-0AG11-3AX0', '12.0.0.0');
 
 INSERT or IGNORE INTO VersoesHardware (mlfb, versao) VALUES
-('6ES7 211-1BD30-0XB0', 'V2.0'),
-('6ES7 211-1BD30-0XB0', 'V2.1'),
-('6ES7 211-1BD30-0XB0', 'V2.2');
+('6ES7 211-1HD30-0XB0', 'V2.0'),
+('6ES7 211-1HD30-0XB0', 'V2.1'),
+('6ES7 211-1HD30-0XB0', 'V2.2');
+
+INSERT or IGNORE INTO VersoesHardware (mlfb, versao) VALUES
+('6ES7 211-1AE31-0XB0', 'V3.0');
+
+INSERT or IGNORE INTO VersoesHardware (mlfb, versao) VALUES
+('6ES7 511-1AK00-0AB0', 'V1.0'),
+('6ES7 511-1AK00-0AB0', 'V1.1'),
+('6ES7 511-1AK00-0AB0', 'V1.5'),
+('6ES7 511-1AK00-0AB0', 'V1.6'),
+('6ES7 511-1AK00-0AB0', 'V1.7'),
+('6ES7 511-1AK00-0AB0', 'V1.8');
+
+INSERT or IGNORE INTO VersoesHardware (mlfb, versao) VALUES
+('6ES7 211-1AE40-0XB0', 'V4.0'),
+('6ES7 211-1AE40-0XB0', 'V4.1'),
+('6ES7 211-1AE40-0XB0', 'V4.2'),
+('6ES7 211-1AE40-0XB0', 'V4.3'),
+('6ES7 211-1AE40-0XB0', 'V4.4');
 
 
 INSERT OR REPLACE INTO IHM_List (mlfb, type, description) VALUES
