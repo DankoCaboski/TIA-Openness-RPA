@@ -45,7 +45,7 @@ def CreateProject():
     if project_name and project_dir: 
         devices = []
         for linha in InfoHardware:
-            devices.append({"HardwareType": linha["combobox"].get(), "Mlfb":linha["mlfb"].get(), "Name": linha["entry"].get()})   
+            devices.append({"HardwareType": linha["combobox"].get(), "Mlfb":linha["mlfb"].get(),"Firm_Version":linha["firm_version"].get(), "Name": linha["entry"].get()})   
         label_status_projeto.config(text="Criando projeto...")
         status_criacao = OpennessController.create_project(project_dir, project_name, devices, rb_blocks_value, gp_blocks_value,selec_blocks_value)
         if status_criacao:
@@ -94,7 +94,7 @@ def validate_all_device_names():
     return all_names_valid
     
 def AddHardware():
-    tupla_Input = {"combobox": tk.StringVar(root), "mlfb": tk.StringVar(root), "entry": tk.StringVar(root)}
+    tupla_Input = {"combobox": tk.StringVar(root), "mlfb": tk.StringVar(root), "firm_version": tk.StringVar(root), "entry": tk.StringVar(root)}
     
     global NHardware
     
@@ -102,7 +102,7 @@ def AddHardware():
         event.widget.tk_focusNext().focus()
         return "break"
 
-    # Combobox 1º coluna
+    # Combobox 1º coluna - Tipo de Hardware
     combobox = ttk.Combobox(screen_frames[4], textvariable=tupla_Input["combobox"], values=opcoes_Hardware)
     combobox.grid(row=NHardware, column=0, padx=5)
     
@@ -123,20 +123,36 @@ def AddHardware():
             valueSource = []
 
         mlfb_combobox['values'] = valueSource
+
+    # Atualiza as versões de firmware com base na seleção de MLFB
+    def update_firmware_versions_ui(*args):
+        global firm_versions
+        selected_mlfb = tupla_Input["mlfb"].get()
+
+        # Acessa as versões usando .get() do dicionário
+        firmware_versions = firm_versions.get(selected_mlfb, [])
+        firm_version_combobox['values'] = firmware_versions
+        if firm_versions:
+            firm_version_combobox.set(firmware_versions[0])  # Define a primeira versão como padrão
+
+            
     
-    # Vincule a função de atualização da combobox à combobox principal
     tupla_Input["combobox"].trace_add('write', update_mlfb_combobox)
+    tupla_Input["mlfb"].trace_add('write', update_firmware_versions_ui)
     
-    # Entry 3º coluna
+    # FirmVersion - Combobox 3º coluna
+    firm_version_combobox = ttk.Combobox(screen_frames[4], textvariable=tupla_Input["firm_version"], values=[])
+    firm_version_combobox.grid(row=NHardware, column=2, padx=5)
+    
+    # Entry - Nome do Hardware 4º coluna
     entry = ttk.Entry(screen_frames[4], textvariable=tupla_Input["entry"])
-    entry.grid(row=NHardware, column=2, padx=5)
-    
-    # Adicione o callback para focar no próximo widget quando a tecla Enter for pressionada
+    entry.grid(row=NHardware, column=3, padx=5)
     entry.bind('<Return>', focus_next_widget)
 
     NHardware += 1
     
     InfoHardware.append(tupla_Input)
+
 
 
 
@@ -169,6 +185,7 @@ RAP_status_Tela = "Idle"
 screen_instance = False
 screen_frames = []
 opcoes_Hardware = ["PLC", "IHM", "IO Node"]
+firm_versions = {}
 selected_version = None
 mlfb_Plc = []
 mlfb_ihm = []
@@ -181,7 +198,7 @@ mlfb_List=[mlfb_Plc, mlfb_ihm, mlfb_npde]
 
 ############### SCREEN ################
 def main_screen():
-    global screen_frames
+    global screen_frames, firm_versions
     
     global screen_instance
     if not screen_instance:
@@ -198,6 +215,17 @@ def main_screen():
             for item in MlfbManagement.getMlfbIHMByHwType(type):
                 mlfb_List[index].append(slice_tupla(str(item)))
             index += 1
+
+        #atualiza lista de versão
+        firm_versions.clear()  # Limpa o dicionário para evitar dados obsoletos
+
+        for hw_type in opcoes_Hardware:
+            firmware_data = MlfbManagement.getMlfbIHMByVersion(hw_type)
+            for mlfb, version in firmware_data:
+                if mlfb not in firm_versions:
+                    firm_versions[mlfb] = []
+                firm_versions[mlfb].append(version)
+            
         
         #Frame for user configuration 
         user_config = ttk.Frame(root)

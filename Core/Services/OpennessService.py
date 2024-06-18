@@ -120,21 +120,19 @@ def open_project(project_path):
     mytia = open_tia_ui()
     return mytia.Projects.OpenWithUpgrade(file_info)
 
-def addHardware(deviceType, deviceName, deviceMlfb, myproject):
+def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion):
     try:
         if deviceType == "PLC":
             print('Creating CPU: ', deviceName)
-            # config_Plc = "OrderNumber:"+deviceMlfb+"/V1.6"
-            # Para fim de teste, retirar o mlfb fixo
-            config_Plc = "OrderNumber:6ES7 512-1SK01-0AB0/V2.5"
+            config_Plc = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
             deviceCPU = myproject.Devices.CreateWithItem(config_Plc, deviceName, deviceName)
             return deviceCPU
             
         elif deviceType == "IHM":
-            print('Creating IHM: ', deviceName)
-            config_Hmi = 'OrderNumber:'+deviceMlfb+'/12.0.0.0'
-            deviceHMI = myproject.Devices.CreateWithItem(config_Hmi, deviceName, None)
-            return deviceHMI
+            print("Creating IHM: ", deviceName)
+            config_Hmi = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
+            deviceIHM = myproject.Devices.CreateWithItem(config_Hmi, deviceName, None)
+            return deviceIHM
 
         elif deviceType == "IO Node":
             RPA_status = 'Creating IO Node: ', deviceName
@@ -162,8 +160,8 @@ def GetAllProfinetInterfaces(myproject):
                     network_interface_cpu = get_network_interface_CPU(device)
                     network_ports.append(network_interface_cpu)
                     
-                elif (hardware_type == "HMI"):
-                    network_interface_ihm = get_network_interface_HMI(device)
+                elif (hardware_type == "IHM"):
+                    network_interface_ihm = get_network_interface_IHM(device)
                     network_ports.append(network_interface_ihm)
                     
             else:
@@ -213,7 +211,7 @@ def get_network_interface_CPU(deviceComposition):
         if optionName == "PROFINET interface_1":
             return get_service(hwf.NetworkInterface, option)
             
-def get_network_interface_HMI(deviceComposition):
+def get_network_interface_IHM(deviceComposition):
     hmi = getCompositionPosition(deviceComposition)[1].DeviceItems
     for option in hmi:
         optionName = option.GetAttribute("Name")
@@ -251,7 +249,7 @@ def is_hmi(device):
         return False
     
     except Exception as e:
-        RPA_status = 'Error checking HMI: ', e
+        RPA_status = 'Error checking IHM: ', e
         print(RPA_status)
         
 def getHardwareType(device):
@@ -260,7 +258,7 @@ def getHardwareType(device):
         if (is_cpu(device_item_impl)):
             return "CPU"
         elif (is_hmi(device_item_impl)):
-            return "HMI"
+            return "IHM"
             
     except Exception as e:
         RPA_status = 'Error getting hardware type: ', e

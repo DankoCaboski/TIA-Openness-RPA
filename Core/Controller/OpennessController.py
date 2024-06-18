@@ -71,8 +71,9 @@ def addHardware(hardware):
         deviceName = device["Name"]
         deviceMlfb = device["Mlfb"]
         deviceType = device["HardwareType"]
+        deviceVersion = device["Firm_Version"]
         
-        hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject))
+        hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject,deviceVersion))
     
     
 def wire_profinet():

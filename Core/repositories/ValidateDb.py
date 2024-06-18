@@ -41,13 +41,13 @@ def insert_cpu(conexao):
 
 def insert_ihm(conexao):
     cursor = conexao.cursor()
-    hmi_List_path = os.path.join(core_path, "Database", "mlfb", "HMI_List.csv")
-    print("Gravando dados na tabela HMI_List")
+    hmi_List_path = os.path.join(core_path, "Database", "mlfb", "IHM_List.csv")
+    print("Gravando dados na tabela IHM_List")
     with open(hmi_List_path, 'r') as arquivo:
         leitor_csv = csv.reader(arquivo)
         for linha in leitor_csv:
             mlfb, type, descricao = linha
-            cursor.execute("INSERT INTO HMI_List (mlfb, type, description) VALUES (?, ?, ?)", (mlfb, type, descricao))
+            cursor.execute("INSERT INTO IHM_List (mlfb, type, description) VALUES (?, ?, ?)", (mlfb, type, descricao))
     conexao.commit()
 
 
