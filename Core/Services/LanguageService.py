@@ -2,7 +2,8 @@ from . import OpennessService
 
 def get_active_languages(myproject):
     language_settings = myproject.LanguageSettings
-    return OpennessService.get_attibutes(["ActiveLanguages"], language_settings)
+    enum = OpennessService.get_attibutes(["ActiveLanguages"], language_settings)
+    return enum[0]
     
 def get_language_by_culture(myproject, language_culture):
     for language in myproject.LanguageSettings.Languages:
