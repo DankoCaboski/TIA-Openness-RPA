@@ -7,17 +7,19 @@ def create_robot_structure(myproject, device, robot_name, robot_type):
 
 def import_robot_bk(myproject, device, robot_group, robot_type : str):
     robot_type = robot_type.upper()
+    
     if robot_type == 'ABB':
         print('Importing ABB robot block')
         #TODO: Trocar rota pelo caminho no servidor
         abb_bk_path = r"C:\Users\Willian\Desktop\exported_bk\bk_abb.xml"
         abb_dependencies = r"C:\Users\Willian\Desktop\exported_bk\bk_dp"
         udts = UDTService.list_udt_from_bk(abb_bk_path)
-        print(udts)
+        
         for udt in udts:
             udt_path = abb_dependencies + '\\' + udt + '.xml'
             OpennessService.import_data_type(myproject, device, udt_path)
         OpennessService.import_block(robot_group, abb_bk_path)
+        
     elif robot_type == 'FANUC':
         print('Importing FANUC robot block')
         #TODO: Trocar rota pelo caminho no servidor

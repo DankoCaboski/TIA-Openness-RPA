@@ -5,6 +5,7 @@ clr.AddReference('System.Collections')
 from System.Collections.Generic import List # type: ignore
 from repositories import UserConfig
 from Controller import LanguageController
+from . import UDTService
 import re
 
 
@@ -310,17 +311,24 @@ def create_group(device, group_name, parent_group):
 
 def import_data_type(myproject, cpu, data_type_path):
     try:
+        udts_dependentes = UDTService.list_udt_from_bk(data_type_path)
+        for udt in udts_dependentes:
+            udt_path = data_type_path.rsplit(".xml", 1)[0] + "\\" + udt + ".xml"
+            import_data_type(myproject, cpu, udt_path) 
+        
         types = get_types(cpu)
         if type(data_type_path) == str:
             data_type_path = get_file_info(data_type_path)
         import_options = tia.ImportOptions.Override
         types.Import(data_type_path, import_options)
+        
     except Exception as e:
         if str(e).__contains__("culture"):
             LanguageController.add_language(myproject, "pt-BR")
             import_data_type(myproject, cpu, data_type_path)
         else:
-            print('Error importing data type:', e)
+            print('Error importing data type from: ', data_type_path)
+            print('Error message: ', e)
    
     
 def export_data_type(device, data_type_name : str, data_type_path : str):
