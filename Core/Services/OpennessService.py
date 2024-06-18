@@ -311,12 +311,14 @@ def create_group(device, group_name, parent_group):
 def import_data_type(myproject, cpu, data_type_path):
     try:
         types = get_types(cpu)
-        data_type_path = get_file_info(data_type_path)
+        if type(data_type_path) == str:
+            data_type_path = get_file_info(data_type_path)
         import_options = tia.ImportOptions.Override
         types.Import(data_type_path, import_options)
     except Exception as e:
         if str(e).__contains__("culture"):
             LanguageController.add_language(myproject, "pt-BR")
+            import_data_type(myproject, cpu, data_type_path)
         else:
             print('Error importing data type:', e)
    
