@@ -5,3 +5,8 @@ def getMlfbByHwType(hw_type):
     cursor = Connection.getCursor()
     cursor.execute('SELECT mlfb FROM CPU_List WHERE type = ?', (hw_type,))
     return cursor.fetchall()
+
+def getMlfbIHMByHwType(hw_type):
+    cursor = Connection.getCursor()
+    cursor.execute('SELECT mlfb FROM HMI_List WHERE type = ?', (hw_type,))
+    return cursor.fetchall()

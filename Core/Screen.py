@@ -115,7 +115,7 @@ def AddHardware():
         
         if selected_option == "PLC":
             valueSource = mlfb_List[0]
-        elif selected_option == "HMI":
+        elif selected_option == "IHM":
             valueSource = mlfb_List[1]
         elif selected_option == "IO Node":
             valueSource = mlfb_List[2]
@@ -168,7 +168,7 @@ InfoHardware = []
 RAP_status_Tela = "Idle"
 screen_instance = False
 screen_frames = []
-opcoes_Hardware = ["PLC", "HMI", "IO Node"]
+opcoes_Hardware = ["PLC", "IHM", "IO Node"]
 selected_version = None
 mlfb_Plc = []
 mlfb_ihm = []
@@ -189,10 +189,15 @@ def main_screen():
         update_status("Idle")
         
         i=0
+        index = 0 
         for type in opcoes_Hardware:
             for ii in MlfbManagement.getMlfbByHwType(type):
                 mlfb_List[i].append(slice_tupla(str(ii)))
             i += 1
+        for type in opcoes_Hardware:
+            for item in MlfbManagement.getMlfbIHMByHwType(type):
+                mlfb_List[index].append(slice_tupla(str(item)))
+            index += 1
         
         #Frame for user configuration 
         user_config = ttk.Frame(root)
@@ -343,7 +348,7 @@ def call_export_bk():
 
 
 def import_blocks_screen():
-    global rb_blocks_value, rb_import_state, gp_blocks_value, gp_import_state
+    global rb_blocks_value, gp_blocks_value
     
     # Criando a janela
     import_config_frame = tk.Toplevel(root)

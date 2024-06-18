@@ -25,6 +25,7 @@ build_exe_options = {
         # Database
         os.path.join("Database", "ddl.sql"),
         os.path.join("Database", "mlfb", "PLC_List.csv"),
+        os.path.join("Database", "mlfb", "HMI_List.csv"),
         
         # SQLite
         os.path.join(sys.base_prefix, 'DLLs', 'sqlite3.dll')
