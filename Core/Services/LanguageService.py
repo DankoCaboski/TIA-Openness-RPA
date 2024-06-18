@@ -4,8 +4,13 @@ def get_active_languages(myproject):
     language_settings = myproject.LanguageSettings
     return OpennessService.get_attibutes(["ActiveLanguages"], language_settings)
     
-def get_language(myproject, language_culture):
-    return myproject.LanguageSettings.Languages.Find(language_culture)
+def get_language_by_culture(myproject, language_culture):
+    for language in myproject.LanguageSettings.Languages:
+        culture = OpennessService.get_attibutes(["Culture"], language)
+        if str(culture[0]) == language_culture:
+            return language
+    
+    raise Exception("Language not found")
 
 def add_language(language, language_composition):
     try:

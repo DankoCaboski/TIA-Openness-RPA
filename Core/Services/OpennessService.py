@@ -316,7 +316,7 @@ def import_data_type(myproject, cpu, data_type_path):
         types.Import(data_type_path, import_options)
     except Exception as e:
         if str(e).__contains__("culture"):
-            LanguageController.add_language(myproject, "Português (Brasil)")
+            LanguageController.add_language(myproject, "pt-BR")
         else:
             print('Error importing data type:', e)
    
