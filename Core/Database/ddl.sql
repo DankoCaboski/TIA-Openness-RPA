@@ -12,7 +12,7 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    IHM_List (
+    IO_List (
         mlfb VARCHAR(50) PRIMARY KEY,
         type VARCHAR(50),
         description VARCHAR(500)

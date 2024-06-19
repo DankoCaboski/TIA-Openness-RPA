@@ -11,7 +11,12 @@ def getMlfbIHMByHwType(hw_type):
     cursor.execute('SELECT mlfb FROM IHM_List WHERE type = ?', (hw_type,))
     return cursor.fetchall()
 
-def getMlfbIHMByVersion(hw_type):
+def getMlfbIOByHwType(hw_type):
+    cursor = Connection.getCursor()
+    cursor.execute('SELECT mlfb FROM IO_List WHERE type = ?', (hw_type,))
+    return cursor.fetchall()
+
+def getMlfbByVersion(hw_type):
     cursor = Connection.getCursor()
     # Realiza a união das tabelas IHM_List e CPU_List com a tabela VersoesHardware para obter as versões correspondentes
     query = """
@@ -24,7 +29,12 @@ def getMlfbIHMByVersion(hw_type):
     FROM CPU_List
     JOIN VersoesHardware ON CPU_List.mlfb = VersoesHardware.mlfb
     WHERE CPU_List.type = ?
+    UNION
+    SELECT VersoesHardware.mlfb, VersoesHardware.versao
+    FROM IO_List
+    JOIN VersoesHardware ON IO_List.mlfb = VersoesHardware.mlfb
+    WHERE IO_List.type = ?
     """
     # Passa o mesmo tipo de hardware para ambas as partes da união
-    cursor.execute(query, (hw_type, hw_type))
+    cursor.execute(query, (hw_type, hw_type, hw_type))
     return cursor.fetchall()

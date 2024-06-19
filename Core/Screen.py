@@ -206,21 +206,28 @@ def main_screen():
         update_status("Idle")
         
         i=0
-        index = 0 
+        IHM = 0 
+        IO = 0
         for type in opcoes_Hardware:
             for ii in MlfbManagement.getMlfbByHwType(type):
                 mlfb_List[i].append(slice_tupla(str(ii)))
             i += 1
+
         for type in opcoes_Hardware:
             for item in MlfbManagement.getMlfbIHMByHwType(type):
-                mlfb_List[index].append(slice_tupla(str(item)))
-            index += 1
+                mlfb_List[IHM].append(slice_tupla(str(item)))
+            IHM += 1
+            
+        for type in opcoes_Hardware:
+            for item in MlfbManagement.getMlfbIOByHwType(type):
+                mlfb_List[IO].append(slice_tupla(str(item)))
+            IO += 1
 
         #atualiza lista de versão
         firm_versions.clear()  # Limpa o dicionário para evitar dados obsoletos
 
         for hw_type in opcoes_Hardware:
-            firmware_data = MlfbManagement.getMlfbIHMByVersion(hw_type)
+            firmware_data = MlfbManagement.getMlfbByVersion(hw_type)
             for mlfb, version in firmware_data:
                 if mlfb not in firm_versions:
                     firm_versions[mlfb] = []

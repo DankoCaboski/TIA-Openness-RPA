@@ -135,10 +135,12 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion):
             return deviceIHM
 
         elif deviceType == "IO Node":
-            RPA_status = 'Creating IO Node: ', deviceName
-            print(RPA_status)
-            confing_IOnode = 'OrderNumber:6ES7 155-6AU01-0BN0/V4.1'
-            return myproject.Devices.CreateWithItem(confing_IOnode, deviceName, deviceName)
+            print('Creating IO Node: ', deviceName)
+            confing_IOnode = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
+            DeviceItemAssociation = myproject.Devices[0].GetAttribute("Items")
+            if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, 2):
+                IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, 2)
+                return IONode
             
     except Exception as e:
         RPA_status = 'Unknown hardware type: ', deviceType
@@ -251,6 +253,19 @@ def is_hmi(device):
     except Exception as e:
         RPA_status = 'Error checking IHM: ', e
         print(RPA_status)
+def is_IO(device):
+    try:
+        device_item = device[0]
+        type_identifier = str(device_item.GetAttribute("TypeIdentifier"))
+        
+        if (type_identifier.__contains__("OrderNumber:6ES7")):
+            print("###################################################IO###################################################") 
+            return True
+        return False
+    
+    except Exception as e:
+        RPA_status = 'Error checking IO: ', e
+        print(RPA_status)
         
 def getHardwareType(device):
     try:
@@ -259,6 +274,8 @@ def getHardwareType(device):
             return "CPU"
         elif (is_hmi(device_item_impl)):
             return "IHM"
+        elif (is_IO(device_item_impl)):
+            return "IO Node"
             
     except Exception as e:
         RPA_status = 'Error getting hardware type: ', e

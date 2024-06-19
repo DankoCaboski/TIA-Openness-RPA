@@ -39,8 +39,8 @@ INSERT or IGNORE INTO VersoesHardware (mlfb, versao) VALUES
 ('6ES7 215-1HG31-0XB0', 'V3.0');
 
 INSERT or IGNORE INTO VersoesHardware (mlfb, versao) VALUES
-('6ES7 513-1AL00-0AB0', 'V1.0'),
-('6ES7 513-1AL00-0AB0', 'V1.1'),
+('6ES7 521-1BH10-0AA0', 'V1.0'),
+('6ES7 521-1BH10-0AA0', 'V1.1'),
 ('6ES7 513-1AL00-0AB0', 'V1.5'),
 ('6ES7 513-1AL00-0AB0', 'V1.6'),
 ('6ES7 513-1AL00-0AB0', 'V1.7'),
@@ -53,6 +53,8 @@ INSERT or IGNORE INTO VersoesHardware (mlfb, versao) VALUES
 ('6AG1 215-1HG40-5XB0', 'V4.3'),
 ('6AG1 215-1HG40-5XB0', 'V4.4');
 
+INSERT into IO_List (mlfb,type,description) VALUES
+('6ES7 521-1BH10-0AA0', 'IO Node', 'N/A');
 
 INSERT OR REPLACE INTO IHM_List (mlfb, type, description) VALUES
 ('6AV6 647-0AH11-3AX0', 'IHM', 'N/A'),
