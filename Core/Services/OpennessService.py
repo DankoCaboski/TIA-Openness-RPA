@@ -137,9 +137,12 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion):
         elif deviceType == "IO Node":
             print('Creating IO Node: ', deviceName)
             confing_IOnode = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
-            DeviceItemAssociation = myproject.Devices[0].GetAttribute("Items")
-            if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, 2):
-                IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, 2)
+            Devices = myproject.Devices[0]
+            count = Devices.DeviceItems.Count
+            print('count: ', count)
+            DeviceItemAssociation = Devices.GetAttribute("Items")
+            if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):
+                IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
                 return IONode
             
     except Exception as e:

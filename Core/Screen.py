@@ -85,18 +85,28 @@ def validate_all_device_names():
     all_names_valid = True
     for info in InfoHardware:
         device_name = info["entry"].get()
-        if device_name in names_seen:
-            info["entry"].set('')  # Limpa o campo de entrada duplicado
+        device_type = info["combobox"].get()
+
+        # Permitir device_name vazio se o device_type for 'IO_Node'
+        if device_type == "IO_Node" and not device_name:
+            continue
+        
+        # Checa por nomes duplicados
+        if device_name in names_seen and device_type != "IO Node":
             messagebox.showerror("Erro", f"O nome do dispositivo '{device_name}' já existe. Por favor, escolha um nome diferente.")
+            info["entry"].set('')  # Limpa o campo de entrada duplicado
             all_names_valid = False
         else:
-            names_seen[device_name] = info["entry"]
+            names_seen[device_name] = None  # Armazena que o nome foi visto
+
     return all_names_valid
+
+
     
 def AddHardware():
     tupla_Input = {"combobox": tk.StringVar(root), "mlfb": tk.StringVar(root), "firm_version": tk.StringVar(root), "entry": tk.StringVar(root)}
     
-    global NHardware
+    global NHardware, CPU_list, IO_List
     
     def focus_next_widget(event):
         event.widget.tk_focusNext().focus()
@@ -115,10 +125,19 @@ def AddHardware():
         
         if selected_option == "PLC":
             valueSource = mlfb_List[0]
+            CPU_list.append(NHardware)
+            print('cpu list', CPU_list)
         elif selected_option == "IHM":
             valueSource = mlfb_List[1]
         elif selected_option == "IO Node":
             valueSource = mlfb_List[2]
+            IO_List.append(NHardware)
+            print('IO list', IO_List)
+            # Verifica se o índice de IO Node é maior que qualquer índice na CPU_list
+            if CPU_list and all(NHardware > cpu_index for cpu_index in CPU_list):
+                print("Índice de IO Node é maior que todos os índices na CPU_list")
+            else:
+                print("Existe índice em CPU_list maior ou igual ao índice de IO Node")
         else:
             valueSource = []
 
@@ -193,6 +212,8 @@ mlfb_npde = []
 rb_blocks_value = 0
 gp_blocks_value = 0
 selec_blocks_value = 0
+CPU_list = []
+IO_List = []
 
 mlfb_List=[mlfb_Plc, mlfb_ihm, mlfb_npde]
 
