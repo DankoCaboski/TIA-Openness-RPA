@@ -67,14 +67,17 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, gp_blo
 def addHardware(hardware):
     deviceName = ''
     deviceMlfb = ''
+    plc_count = 0
     for device in hardware:
         deviceName = device["Name"]
         deviceMlfb = device["Mlfb"]
         deviceType = device["HardwareType"]
         deviceVersion = device["Firm_Version"]
         
-        hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject,deviceVersion))
-    
+        if deviceType == "PLC":
+            plc_count += 1
+      
+        hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject,deviceVersion, plc_count ))
     
 def wire_profinet():
     global RPA_status

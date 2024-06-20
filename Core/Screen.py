@@ -125,19 +125,10 @@ def AddHardware():
         
         if selected_option == "PLC":
             valueSource = mlfb_List[0]
-            CPU_list.append(NHardware)
-            print('cpu list', CPU_list)
         elif selected_option == "IHM":
             valueSource = mlfb_List[1]
         elif selected_option == "IO Node":
             valueSource = mlfb_List[2]
-            IO_List.append(NHardware)
-            print('IO list', IO_List)
-            # Verifica se o índice de IO Node é maior que qualquer índice na CPU_list
-            if CPU_list and all(NHardware > cpu_index for cpu_index in CPU_list):
-                print("Índice de IO Node é maior que todos os índices na CPU_list")
-            else:
-                print("Existe índice em CPU_list maior ou igual ao índice de IO Node")
         else:
             valueSource = []
 

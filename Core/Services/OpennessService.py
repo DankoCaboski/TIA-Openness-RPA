@@ -120,7 +120,7 @@ def open_project(project_path):
     mytia = open_tia_ui()
     return mytia.Projects.OpenWithUpgrade(file_info)
 
-def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion):
+def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_count):
     try:
         if deviceType == "PLC":
             print('Creating CPU: ', deviceName)
@@ -137,9 +137,9 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion):
         elif deviceType == "IO Node":
             print('Creating IO Node: ', deviceName)
             confing_IOnode = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
-            Devices = myproject.Devices[0]
+            plcRef = plc_count - 1
+            Devices = myproject.Devices[plcRef]
             count = Devices.DeviceItems.Count
-            print('count: ', count)
             DeviceItemAssociation = Devices.GetAttribute("Items")
             if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):
                 IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
