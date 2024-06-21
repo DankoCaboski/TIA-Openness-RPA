@@ -1,5 +1,6 @@
 from Services import OpennessService
 from . import RobotController
+from . import MesaGiratoriaController
 import traceback
 from System.IO import FileInfo # type: ignore
 import tkinter as tk
@@ -8,7 +9,7 @@ RPA_status = "Idle"
 hardwareList = []
 myproject = None
 
-def create_project(project_path, project_name, hardware, rb_blocks_value, gp_blocks_value, selec_blocks_value):
+def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blocks_value, selec_blocks_value):
     
     try:
         
@@ -40,15 +41,16 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, gp_blo
                 # import_block = OpennessService.verify_and_import(myproject, deviceName, r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\db_falhas.xml", repetitions= rb_blocks_value, tipo = tipo)
                 # print(import_block)
 
-        # if gp_blocks_value > 0:
-        #     for device in hardware:
-        #         deviceName = device["Name"]
-        #         import_block = OpennessService.verify_and_import(myproject, deviceName, r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\fc_falhas.xml", repetitions=gp_blocks_value, tipo= '')
-        #         print(import_block)
+        if mg_blocks_value > 0:
+            for device in hardware:
+                deviceName = device["Name"]
+                device = OpennessService.get_device_by_name(myproject, deviceName)
+                MesaGiratoriaController.create_mesa_structure(myproject, device, "nome_robo", "abb")
+        
         # if selec_blocks_value > 0:
         #     for device in hardware:
         #         deviceName = device["Name"]
-        #         import_block = OpennessService.verify_and_import(myproject, deviceName, dir_block, repetitions=gp_blocks_value, tipo= '')
+        #         import_block = OpennessService.verify_and_import(myproject, deviceName, dir_block, repetitions=mg_blocks_value, tipo= '')
         #         print(import_block)
 
         myproject.Save()

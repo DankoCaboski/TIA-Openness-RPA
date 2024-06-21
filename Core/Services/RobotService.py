@@ -10,9 +10,8 @@ def import_robot_bk(myproject, device, robot_group, robot_type : str):
     
     if robot_type == 'ABB':
         print('Importing ABB robot block')
-        #TODO: Trocar rota pelo caminho no servidor
-        abb_bk_path = r"C:\Users\Willian\Desktop\exported_bk\bk_abb.xml"
-        abb_dependencies = r"C:\Users\Willian\Desktop\exported_bk\bk_dp"
+        abb_bk_path = r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\robots\bk_abb.xml"
+        abb_dependencies = r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\robots\bk_dp"
         udts = UDTService.list_udt_from_bk(abb_bk_path)
         
         for udt in udts:
@@ -22,5 +21,4 @@ def import_robot_bk(myproject, device, robot_group, robot_type : str):
         
     elif robot_type == 'FANUC':
         print('Importing FANUC robot block')
-        #TODO: Trocar rota pelo caminho no servidor
         OpennessService.import_block(robot_group, 123, r"C:\Users\Willian\Desktop\exported_bk\bk_fanuc.xml")

@@ -47,7 +47,7 @@ def CreateProject():
         for linha in InfoHardware:
             devices.append({"HardwareType": linha["combobox"].get(), "Mlfb":linha["mlfb"].get(),"Firm_Version":linha["firm_version"].get(), "Name": linha["entry"].get()})   
         label_status_projeto.config(text="Criando projeto...")
-        status_criacao = OpennessController.create_project(project_dir, project_name, devices, rb_blocks_value, gp_blocks_value,selec_blocks_value)
+        status_criacao = OpennessController.create_project(project_dir, project_name, devices, rb_blocks_value, mg_blocks_value,selec_blocks_value)
         if status_criacao:
             label_status_projeto.config(text="Projeto criado com sucesso!")
         else:
@@ -201,7 +201,7 @@ mlfb_Plc = []
 mlfb_ihm = []
 mlfb_npde = []
 rb_blocks_value = 0
-gp_blocks_value = 0
+mg_blocks_value = 0
 selec_blocks_value = 0
 CPU_list = []
 IO_List = []
@@ -396,7 +396,7 @@ def call_export_bk():
 
 
 def import_blocks_screen():
-    global rb_blocks_value, gp_blocks_value
+    global rb_blocks_value, mg_blocks_value
     
     # Criando a janela
     import_config_frame = tk.Toplevel(root)
@@ -460,7 +460,7 @@ def add_elements_to_frame(frame):
     InstructionBlocks1.grid(row=1, column=0, padx=5, pady=5, sticky='w')
 
     entrada2gp = tk.Entry(frame)
-    entrada2gp.insert(0, gp_blocks_value)  # Inserir o valor armazenado
+    entrada2gp.insert(0, mg_blocks_value)  # Inserir o valor armazenado
     entrada2gp.grid(row=1, column=1, padx=2, pady=2)
 
     # Bloco do selecionado 
@@ -472,17 +472,17 @@ def add_elements_to_frame(frame):
     entrada3.grid(row=2, column=1, padx=2, pady=2)
 
 def save_config(entrada1rb, entrada2gp, window):
-    global rb_blocks_value, gp_blocks_value, selec_blocks_value
+    global rb_blocks_value, mg_blocks_value, selec_blocks_value
     
     # Atualizar as variáveis globais com os valores atuais
     rb_blocks_value = int(entrada1rb.get())
-    gp_blocks_value = int(entrada2gp.get())
+    mg_blocks_value = int(entrada2gp.get())
     selec_blocks_value = int(entrada3.get())
     
     # Aqui você pode salvar esses dados em um arquivo, banco de dados, etc.
     with open("config_blocos.txt", "w") as file:
         file.write(f"Robô - Quantidade: {rb_blocks_value}\n")
-        file.write(f"Grampo - Quantidade: {gp_blocks_value}\n")
+        file.write(f"Grampo - Quantidade: {mg_blocks_value}\n")
 
     print("Configurações salvas com sucesso!")
     
