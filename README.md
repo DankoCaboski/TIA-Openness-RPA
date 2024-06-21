@@ -1,5 +1,7 @@
 # RPA for creating and configuring a TIA Portal project   
 This project aims to develop a user-friendly data input interface for automating project generation on the TIA Portal, leveraging the TIA Openness API. It consists of a GUI built in Python, utilizing tkinter and pythonnet, to facilitate the management of TIA Portal project creation.
+
+This repository is being used as an MVP to prove the viability of the concept. To check the status of the final project, check [this repository](https://github.com/DankoCaboski/RPA-Tia-openness)
 >
     
 > This project was inspired by the following repository
