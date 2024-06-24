@@ -19,7 +19,7 @@ if not os.path.exists(favico_path):
 
 # Criando a janela principal
 root = tk.Tk()
-root.geometry("700x500")
+root.geometry("800x500")
 root.iconbitmap(favico_path)
 root.title("RPA Tia Openness")
 
@@ -104,9 +104,16 @@ def validate_all_device_names():
 
     
 def AddHardware():
-    tupla_Input = {"combobox": tk.StringVar(root), "mlfb": tk.StringVar(root), "firm_version": tk.StringVar(root), "entry": tk.StringVar(root), "Start_Adress": tk.IntVar(root)}
-    
     global NHardware, CPU_list, IO_List
+    
+    if NHardware == 0:
+        # Cabeçalhos das colunas
+        headers = ["Type of Device", "Article Number", "Version", "Name", "Start Address"]
+        for idx, header in enumerate(headers):
+            label = ttk.Label(screen_frames[4], text=header)
+            label.grid(row=0, column=idx, padx=5, pady=5)
+
+    tupla_Input = {"combobox": tk.StringVar(root), "mlfb": tk.StringVar(root), "firm_version": tk.StringVar(root), "entry": tk.StringVar(root), "Start_Adress": tk.IntVar(root)}
     
     def focus_next_widget(event):
         event.widget.tk_focusNext().focus()
@@ -114,11 +121,11 @@ def AddHardware():
 
     # Combobox 1º coluna - Tipo de Hardware
     combobox = ttk.Combobox(screen_frames[4], textvariable=tupla_Input["combobox"], values=opcoes_Hardware)
-    combobox.grid(row=NHardware, column=0, padx=5)
+    combobox.grid(row=NHardware + 1, column=0, padx=5)
     
     # MLFB - Combobox 2º coluna       
     mlfb_combobox = ttk.Combobox(screen_frames[4], textvariable=tupla_Input["mlfb"])
-    mlfb_combobox.grid(row=NHardware, column=1, padx=5)
+    mlfb_combobox.grid(row=NHardware + 1, column=1, padx=5)
     
     def update_mlfb_combobox(*args):
         selected_option = tupla_Input["combobox"].get()
@@ -137,34 +144,30 @@ def AddHardware():
 
         mlfb_combobox['values'] = valueSource
 
-    # Atualiza as versões de firmware com base na seleção de MLFB
     def update_firmware_versions_ui(*args):
-        global firm_versions
         selected_mlfb = tupla_Input["mlfb"].get()
-
-        # Acessa as versões usando .get() do dicionário
         firmware_versions = firm_versions.get(selected_mlfb, [])
         firm_version_combobox['values'] = firmware_versions
         if firmware_versions:
-            firm_version_combobox.set(firmware_versions[0])  # Define a primeira versão como padrão
+            firm_version_combobox.set(firmware_versions[0])
     
     tupla_Input["combobox"].trace_add('write', update_mlfb_combobox)
     tupla_Input["mlfb"].trace_add('write', update_firmware_versions_ui)
     
     # FirmVersion - Combobox 3º coluna
     firm_version_combobox = ttk.Combobox(screen_frames[4], textvariable=tupla_Input["firm_version"], values=[])
-    firm_version_combobox.grid(row=NHardware, column=2, padx=5)
+    firm_version_combobox.grid(row=NHardware + 1, column=2, padx=5)
     
     # Entry - Nome do Hardware 4º coluna
     entry = ttk.Entry(screen_frames[4], textvariable=tupla_Input["entry"])
-    entry.grid(row=NHardware, column=3, padx=5)
+    entry.grid(row=NHardware + 1, column=3, padx=5)
     entry.bind('<Return>', focus_next_widget)
 
     # Entry Especial - Só aparece para IO Node
     special_entry = ttk.Entry(screen_frames[4], textvariable=tupla_Input["Start_Adress"])
-    special_entry.grid(row=NHardware, column=4, padx=5)
+    special_entry.grid(row=NHardware + 1, column=4, padx=5)
     special_entry.bind('<Return>', focus_next_widget)
-    special_entry.grid_remove() #inicia sem
+    special_entry.grid_remove()  # Inicia sem aparecer
 
     NHardware += 1
     
