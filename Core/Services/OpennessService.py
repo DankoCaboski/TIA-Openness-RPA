@@ -1,6 +1,7 @@
 import signal
 import clr
 from System.IO import DirectoryInfo, FileInfo  # type: ignore
+from System import Int32 # type: ignore
 clr.AddReference('System.Collections')
 from System.Collections.Generic import List # type: ignore
 from repositories import UserConfig
@@ -120,7 +121,7 @@ def open_project(project_path):
     mytia = open_tia_ui()
     return mytia.Projects.OpenWithUpgrade(file_info)
 
-def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_count):
+def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_count,Start_Adress):
     try:
         if deviceType == "PLC":
             print('Creating CPU: ', deviceName)
@@ -143,7 +144,12 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
             DeviceItemAssociation = Devices.GetAttribute("Items")
             if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):
                 IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
+                addressController = Devices.DeviceItems[count].DeviceItems[0].Addresses[0]
+                StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress))
+                GETStartAddress = addressController.GetAttribute("StartAddress")
+                print("Address Start: " , GETStartAddress )
                 return IONode
+            
             
     except Exception as e:
         RPA_status = 'Unknown hardware type: ', deviceType

@@ -45,7 +45,7 @@ def CreateProject():
     if project_name and project_dir: 
         devices = []
         for linha in InfoHardware:
-            devices.append({"HardwareType": linha["combobox"].get(), "Mlfb":linha["mlfb"].get(),"Firm_Version":linha["firm_version"].get(), "Name": linha["entry"].get()})   
+            devices.append({"HardwareType": linha["combobox"].get(), "Mlfb":linha["mlfb"].get(),"Firm_Version":linha["firm_version"].get(), "Name": linha["entry"].get(), "Start_Adress": linha["Start_Adress"].get()})   
         label_status_projeto.config(text="Criando projeto...")
         status_criacao = OpennessController.create_project(project_dir, project_name, devices, rb_blocks_value, mg_blocks_value,selec_blocks_value)
         if status_criacao:
@@ -104,7 +104,7 @@ def validate_all_device_names():
 
     
 def AddHardware():
-    tupla_Input = {"combobox": tk.StringVar(root), "mlfb": tk.StringVar(root), "firm_version": tk.StringVar(root), "entry": tk.StringVar(root)}
+    tupla_Input = {"combobox": tk.StringVar(root), "mlfb": tk.StringVar(root), "firm_version": tk.StringVar(root), "entry": tk.StringVar(root), "Start_Adress": tk.IntVar(root)}
     
     global NHardware, CPU_list, IO_List
     
@@ -125,10 +125,13 @@ def AddHardware():
         
         if selected_option == "PLC":
             valueSource = mlfb_List[0]
+            special_entry.grid_remove()
         elif selected_option == "IHM":
             valueSource = mlfb_List[1]
+            special_entry.grid_remove()
         elif selected_option == "IO Node":
             valueSource = mlfb_List[2]
+            special_entry.grid()
         else:
             valueSource = []
 
@@ -142,10 +145,8 @@ def AddHardware():
         # Acessa as versões usando .get() do dicionário
         firmware_versions = firm_versions.get(selected_mlfb, [])
         firm_version_combobox['values'] = firmware_versions
-        if firm_versions:
+        if firmware_versions:
             firm_version_combobox.set(firmware_versions[0])  # Define a primeira versão como padrão
-
-            
     
     tupla_Input["combobox"].trace_add('write', update_mlfb_combobox)
     tupla_Input["mlfb"].trace_add('write', update_firmware_versions_ui)
@@ -158,6 +159,12 @@ def AddHardware():
     entry = ttk.Entry(screen_frames[4], textvariable=tupla_Input["entry"])
     entry.grid(row=NHardware, column=3, padx=5)
     entry.bind('<Return>', focus_next_widget)
+
+    # Entry Especial - Só aparece para IO Node
+    special_entry = ttk.Entry(screen_frames[4], textvariable=tupla_Input["Start_Adress"])
+    special_entry.grid(row=NHardware, column=4, padx=5)
+    special_entry.bind('<Return>', focus_next_widget)
+    special_entry.grid_remove() #inicia sem
 
     NHardware += 1
     
@@ -205,7 +212,6 @@ mg_blocks_value = 0
 selec_blocks_value = 0
 CPU_list = []
 IO_List = []
-
 mlfb_List=[mlfb_Plc, mlfb_ihm, mlfb_npde]
 
 ############### SCREEN ################
