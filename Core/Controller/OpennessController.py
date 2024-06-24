@@ -1,6 +1,8 @@
 from Services import OpennessService
 from . import RobotController
 from . import MesaGiratoriaController
+from . import StandardAxisController
+from Controller import LanguageController
 import traceback
 from System.IO import FileInfo # type: ignore
 import tkinter as tk
@@ -25,11 +27,21 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
         
         global myproject
         myproject = OpennessService.create_project(mytia, project_path, project_name)
-
+        LanguageController.add_language(myproject, "pt-BR")
         if hardware != None and myproject != None:
             addHardware(hardware)
             wire_profinet()
             myproject.Save()
+        
+        for device in hardware:    
+            deviceName = device["Name"]
+            device = OpennessService.get_device_by_name(myproject, deviceName)
+            OpennessService.create_group(device, "01_Sistema", None)
+
+            StandardAxisController.create_standard_structure(myproject, device)
+
+            OpennessService.create_group(device, "03_Blocos Operacionais", None)
+            OpennessService.create_group(device, "04_Safety", None)
 
         if rb_blocks_value > 0 : 
             for device in hardware:
@@ -45,7 +57,7 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
             for device in hardware:
                 deviceName = device["Name"]
                 device = OpennessService.get_device_by_name(myproject, deviceName)
-                MesaGiratoriaController.create_mesa_structure(myproject, device, "nome_robo", "abb")
+                MesaGiratoriaController.create_mesa_structure(myproject, device, "Mesa Giratória", "")
         
         # if selec_blocks_value > 0:
         #     for device in hardware:

@@ -358,8 +358,6 @@ def user_config_screen():
     
     dll_config_frame.pack(padx=5, pady=5)
     
-    SaveConfirmations = tk.Button(usr_config_screen, text="Salvar", command=lambda: setDllPath(dll_matrix))
-    SaveConfirmations.pack(padx=5, pady=5)
     
     fechar_botao = tk.Button(usr_config_screen, text="Fechar", command=usr_config_screen.destroy)
     fechar_botao.pack()
