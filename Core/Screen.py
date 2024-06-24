@@ -454,7 +454,7 @@ def add_elements_to_frame(frame):
 
 
     # Bloco do grampo
-    InstructionBlocks1 = tk.Label(frame, text="Quantidade de blocos de mesa giratória deseja importar?")
+    InstructionBlocks1 = tk.Label(frame, text="Quantidade de mesas giratórias deseja importar?")
     InstructionBlocks1.grid(row=1, column=0, padx=5, pady=5, sticky='w')
 
     entrada2gp = tk.Entry(frame)

@@ -57,7 +57,7 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
             for device in hardware:
                 deviceName = device["Name"]
                 device = OpennessService.get_device_by_name(myproject, deviceName)
-                MesaGiratoriaController.create_mesa_structure(myproject, device, "Mesa Giratória", "")
+                MesaGiratoriaController.create_mesa_structure(myproject, device, "Mesa Giratória", "", mg_blocks_value)
         
         # if selec_blocks_value > 0:
         #     for device in hardware:
