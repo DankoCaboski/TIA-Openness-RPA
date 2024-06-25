@@ -30,7 +30,7 @@ def create_db():
 
 def insert_cpu(conexao):
     cursor = conexao.cursor()
-    plc_List_path = os.path.join(core_path, "Database", "mlfb", "PLC_List.csv")
+    plc_List_path = os.path.join(core_path, "Database", "mlfb", "CONTROLLERS_List.csv")
     print("Gravando dados na tabela CPU_List")
     with open(plc_List_path, 'r') as arquivo:
         leitor_csv = csv.reader(arquivo)

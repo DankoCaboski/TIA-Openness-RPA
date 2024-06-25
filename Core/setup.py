@@ -24,7 +24,7 @@ build_exe_options = {
         
         # Database
         os.path.join("Database", "ddl.sql"),
-        os.path.join("Database", "mlfb", "PLC_List.csv"),
+        os.path.join("Database", "mlfb", "CONTROLLERS_List.csv"),
         os.path.join("Database", "mlfb", "IHM_List.csv"),
         
         # SQLite

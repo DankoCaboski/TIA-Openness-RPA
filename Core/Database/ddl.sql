@@ -18,27 +18,38 @@ CREATE TABLE
         description VARCHAR(500)
     );
 
-CREATE TABLE VersoesHardware (
+ALTER TABLE VersoesHardware (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     mlfb VARCHAR(50) NOT NULL,
     versao VARCHAR(50) NOT NULL,
     FOREIGN KEY (mlfb) REFERENCES IHM_List(mlfb),
+    FOREIGN KEY (mlfb) REFERENCES IO_List(mlfb),
+    FOREIGN KEY (mlfb) REFERENCES CPU_List(mlfb),
     UNIQUE(mlfb, versao)
 );
 
 
-SELECT * FROM IHM_List;
-SELECT * FROM VersoesHardware WHERE  mlfb = '6ES7'; 214-1AG31-0XB0';
+SELECT * FROM VersoesHardware WHERE mlfb = '6ES7 521-1BH10-0AA0';
 
-DELETE FROM VersoesHardware  WHERE mlfb = '6ES7 214-1BE30-0XB0\';and versao = '14.0.0.0';
+SELECT * FROM CPU_List; WHERE  mlfb = '6ES7 521-1BH10-0AA0'; 214-1AG31-0XB0';
+
+DELETE FROM VersoesHardware WHERE id = 1330;
+COMMIT;
+
+UPDATE CPU_List
+SET type = 'CONTROLLERS';
+
+SELECT * FROM VersoesHardware WHERE id = 1330;
+
+DELETE FROM IO_List  WHERE mlfb = '6ES7 521-1BH10-0AA0';
 WHERE ROWID = (
     SELECT ROWID FROM VersoesHardware
-    WHERE mlfb = '6AV2 124-0QC02-0AX1'and versao '14.0.0.0'
+    WHERE mlfb = '6ES7 521-1BH10-0AA0'and versao 'V1.0'
 
 );
 
 
-Drop TABLE IHM_List;
+Drop TABLE IO_List;
 Drop TABLE HMI_List;
 DROP TABLE VersoesHardware;
 

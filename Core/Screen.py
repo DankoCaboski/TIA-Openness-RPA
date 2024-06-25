@@ -88,11 +88,11 @@ def validate_all_device_names():
         device_type = info["combobox"].get()
 
         # Permitir device_name vazio se o device_type for 'IO_Node'
-        if device_type == "IO_Node" and not device_name:
+        if device_type == "DI" and device_type == "DO" and not device_name:
             continue
         
         # Checa por nomes duplicados
-        if device_name in names_seen and device_type != "IO Node":
+        if device_name in names_seen and device_type != "DI" and device_type != "DO":
             messagebox.showerror("Erro", f"O nome do dispositivo '{device_name}' já existe. Por favor, escolha um nome diferente.")
             info["entry"].set('')  # Limpa o campo de entrada duplicado
             all_names_valid = False
@@ -130,14 +130,17 @@ def AddHardware():
     def update_mlfb_combobox(*args):
         selected_option = tupla_Input["combobox"].get()
         
-        if selected_option == "PLC":
+        if selected_option == "CONTROLLERS":
             valueSource = mlfb_List[0]
             special_entry.grid_remove()
         elif selected_option == "IHM":
             valueSource = mlfb_List[1]
             special_entry.grid_remove()
-        elif selected_option == "IO Node":
+        elif selected_option == "DI":
             valueSource = mlfb_List[2]
+            special_entry.grid()
+        elif selected_option == "DO":
+            valueSource = mlfb_List[3]
             special_entry.grid()
         else:
             valueSource = []
@@ -163,7 +166,7 @@ def AddHardware():
     entry.grid(row=NHardware + 1, column=3, padx=5)
     entry.bind('<Return>', focus_next_widget)
 
-    # Entry Especial - Só aparece para IO Node
+    # Entry Especial - Só aparece para DI
     special_entry = ttk.Entry(screen_frames[4], textvariable=tupla_Input["Start_Adress"])
     special_entry.grid(row=NHardware + 1, column=4, padx=5)
     special_entry.bind('<Return>', focus_next_widget)
@@ -204,18 +207,19 @@ InfoHardware = []
 RAP_status_Tela = "Idle"
 screen_instance = False
 screen_frames = []
-opcoes_Hardware = ["PLC", "IHM", "IO Node"]
+opcoes_Hardware = ["CONTROLLERS", "IHM", "DI", "DO"]
 firm_versions = {}
 selected_version = None
 mlfb_Plc = []
 mlfb_ihm = []
-mlfb_npde = []
+mlfb_DI = []
+mlfb_DO = []
 rb_blocks_value = 0
 mg_blocks_value = 0
 selec_blocks_value = 0
 CPU_list = []
 IO_List = []
-mlfb_List=[mlfb_Plc, mlfb_ihm, mlfb_npde]
+mlfb_List=[mlfb_Plc, mlfb_ihm, mlfb_DI, mlfb_DO]
 
 ############### SCREEN ################
 def main_screen():

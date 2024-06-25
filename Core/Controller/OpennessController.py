@@ -90,7 +90,7 @@ def addHardware(hardware):
         deviceVersion = device["Firm_Version"]
         Start_Adress = device ["Start_Adress"]
         
-        if deviceType == "PLC":
+        if deviceType == "CONTROLLERS":
             plc_count += 1
       
         hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject,deviceVersion, plc_count, Start_Adress ))

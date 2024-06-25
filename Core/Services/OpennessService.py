@@ -123,7 +123,7 @@ def open_project(project_path):
 
 def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_count,Start_Adress):
     try:
-        if deviceType == "PLC":
+        if deviceType == "CONTROLLERS":
             print('Creating CPU: ', deviceName)
             config_Plc = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
             deviceCPU = myproject.Devices.CreateWithItem(config_Plc, deviceName, deviceName)
@@ -135,7 +135,7 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
             deviceIHM = myproject.Devices.CreateWithItem(config_Hmi, deviceName, None)
             return deviceIHM
 
-        elif deviceType == "IO Node":
+        elif deviceType == "DI" or deviceType == "DO":
             print('Creating IO Node: ', deviceName)
             confing_IOnode = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
             plcRef = plc_count - 1
@@ -206,7 +206,7 @@ def get_software(parent):
         else:
             plc_software = software_container.Software
             if not plc_software:
-                raise Exception("No PLC software found for device.")
+                raise Exception("No CONTROLLERS software found for device.")
             return software_container.Software
         
     except Exception as e:
@@ -385,7 +385,7 @@ def export_data_type(device, data_type_name : str, data_type_path : str):
     except Exception as e:
         print('Error exporting data type while in service:', e)
   
-# Função para importar os blocos de código para o software PLC
+# Função para importar os blocos de código para o software CONTROLLERS
 def import_block(object, file_path):
     try:
         import_options = tia.ImportOptions.Override
