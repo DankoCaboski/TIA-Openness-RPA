@@ -152,10 +152,19 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
             DeviceItemAssociation = Devices.GetAttribute("Items")
             if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):
                 IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
-                addressController = Devices.DeviceItems[count].DeviceItems[0].Addresses[0]
-                StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress))
-                GETStartAddress = addressController.GetAttribute("StartAddress")
-                print("Address Start: " , GETStartAddress )
+                if typeName == "ET 200SP-Station":
+                    addressController = Devices.DeviceItems[countFINAL].DeviceItems[0].Addresses[0]
+                    StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress))
+                    GETStartAddress = addressController.GetAttribute("StartAddress")
+                elif typeName == "ET 200S station":
+                    addressController = Devices.DeviceItems[countFINAL].DeviceItems[0].Addresses[0]
+                    StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress))
+                    GETStartAddress = addressController.GetAttribute("StartAddress")
+                else:
+                    addressController = Devices.DeviceItems[count].DeviceItems[0].Addresses[0]
+                    StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress))
+                    GETStartAddress = addressController.GetAttribute("StartAddress")
+                    print("Address Start: " , GETStartAddress )
                 return IONode
             
             
