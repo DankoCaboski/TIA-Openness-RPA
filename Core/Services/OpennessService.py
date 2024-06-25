@@ -223,7 +223,7 @@ def get_network_interface_CPU(deviceComposition):
             return get_service(hwf.NetworkInterface, option)
             
 def get_network_interface_IHM(deviceComposition):
-    hmi = getCompositionPosition(deviceComposition)[1].DeviceItems
+    hmi = getCompositionPosition(deviceComposition)[2].DeviceItems
     for option in hmi:
         optionName = option.GetAttribute("Name")
         if optionName == "PROFINET Interface_1":
@@ -268,7 +268,6 @@ def is_IO(device):
         type_identifier = str(device_item.GetAttribute("TypeIdentifier"))
         
         if (type_identifier.__contains__("OrderNumber:6ES7")):
-            print("###################################################IO###################################################") 
             return True
         return False
     
