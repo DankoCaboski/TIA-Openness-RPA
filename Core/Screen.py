@@ -146,13 +146,13 @@ def AddHardware():
             valueSource = []
 
         mlfb_combobox['values'] = valueSource
-
+    #Função para atualizar a versão do componente para a ultima
     def update_firmware_versions_ui(*args):
         selected_mlfb = tupla_Input["mlfb"].get()
         firmware_versions = firm_versions.get(selected_mlfb, [])
         firm_version_combobox['values'] = firmware_versions
         if firmware_versions:
-            firm_version_combobox.set(firmware_versions[0])
+            firm_version_combobox.set(firmware_versions[-1])
     
     tupla_Input["combobox"].trace_add('write', update_mlfb_combobox)
     tupla_Input["mlfb"].trace_add('write', update_firmware_versions_ui)

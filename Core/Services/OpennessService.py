@@ -144,10 +144,11 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
             if typeName == "ET 200SP-Station":
                 countFINAL = Devices.DeviceItems.Count
                 count = countFINAL - 1 
-                print(" DENTRO TYPE: ",count )
+            elif typeName == "ET 200S station":
+                countFINAL = Devices.DeviceItems.Count
+                count = countFINAL + 2
             else:
                 count = Devices.DeviceItems.Count
-                print('FORA TYPE',count )
             DeviceItemAssociation = Devices.GetAttribute("Items")
             if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):
                 IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
