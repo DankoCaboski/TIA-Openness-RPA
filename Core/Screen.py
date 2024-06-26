@@ -5,7 +5,7 @@ import pywinauto
 import tkinter as tk
 from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
-
+import re
 from repositories import UserConfig, MlfbManagement
 from Controller.OpennessController import open_project, export_data_type, export_block
 from Services.OpennessService import add_DLL, configurePath
@@ -108,12 +108,12 @@ def AddHardware():
     
     if NHardware == 0:
         # Cabeçalhos das colunas
-        headers = ["Type of Device", "Article Number", "Version", "Name", "Start Address"]
+        headers = ["Type of Device", "Article Number", "Version", "Name", "Address"]
         for idx, header in enumerate(headers):
             label = ttk.Label(screen_frames[4], text=header)
             label.grid(row=0, column=idx, padx=5, pady=5)
 
-    tupla_Input = {"combobox": tk.StringVar(root), "mlfb": tk.StringVar(root), "firm_version": tk.StringVar(root), "entry": tk.StringVar(root), "Start_Adress": tk.IntVar(root)}
+    tupla_Input = {"combobox": tk.StringVar(root), "mlfb": tk.StringVar(root), "firm_version": tk.StringVar(root), "entry": tk.StringVar(root), "Start_Adress": tk.StringVar(root)}
     
     def focus_next_widget(event):
         event.widget.tk_focusNext().focus()
@@ -126,21 +126,31 @@ def AddHardware():
     # MLFB - Combobox 2º coluna       
     mlfb_combobox = ttk.Combobox(screen_frames[4], textvariable=tupla_Input["mlfb"])
     mlfb_combobox.grid(row=NHardware + 1, column=1, padx=5)
+
+    def validate_address_input(P):
+        if tupla_Input["combobox"].get() == "CONTROLLERS" or "IHM" :
+            return re.match(r'^\d{0,3}(\.\d{0,3}){0,3}(\.\d{0,2})?$', P) is not None
+        
+        elif tupla_Input["combobox"].get() == "DI" or "DO":
+            return re.match(r'^\d{0,5}?$', P) is not None
+        else:
+            return P.isdigit()
+
+    validate_command = (root.register(validate_address_input), '%P')
     
     def update_mlfb_combobox(*args):
         selected_option = tupla_Input["combobox"].get()
         
         if selected_option == "CONTROLLERS":
             valueSource = mlfb_List[0]
-            special_entry.grid_remove()
+            tupla_Input["Start_Adress"].set("192.168.0.01")
         elif selected_option == "IHM":
             valueSource = mlfb_List[1]
-            special_entry.grid_remove()
-        elif selected_option == "DI":
-            valueSource = mlfb_List[2]
-            special_entry.grid()
-        elif selected_option == "DO":
-            valueSource = mlfb_List[3]
+            tupla_Input["Start_Adress"].set("192.168.0.01")
+            tupla_Input["Start_Adress"].set("0")
+        elif selected_option == "DI" or selected_option == "DO":
+            valueSource = mlfb_List[2 if selected_option == "DI" else 3]
+            tupla_Input["Start_Adress"].set("0")
             special_entry.grid()
         else:
             valueSource = []
@@ -153,7 +163,7 @@ def AddHardware():
         firm_version_combobox['values'] = firmware_versions
         if firmware_versions:
             firm_version_combobox.set(firmware_versions[-1])
-    
+
     tupla_Input["combobox"].trace_add('write', update_mlfb_combobox)
     tupla_Input["mlfb"].trace_add('write', update_firmware_versions_ui)
     
@@ -167,10 +177,9 @@ def AddHardware():
     entry.bind('<Return>', focus_next_widget)
 
     # Entry Especial - Só aparece para DI
-    special_entry = ttk.Entry(screen_frames[4], textvariable=tupla_Input["Start_Adress"])
+    special_entry = ttk.Entry(screen_frames[4], textvariable=tupla_Input["Start_Adress"],validate='key', validatecommand=validate_command)
     special_entry.grid(row=NHardware + 1, column=4, padx=5)
     special_entry.bind('<Return>', focus_next_widget)
-    special_entry.grid_remove()  # Inicia sem aparecer
 
     NHardware += 1
     
