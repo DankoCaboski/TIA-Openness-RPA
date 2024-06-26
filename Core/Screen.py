@@ -147,7 +147,6 @@ def AddHardware():
         elif selected_option == "IHM":
             valueSource = mlfb_List[1]
             tupla_Input["Start_Adress"].set("192.168.0.01")
-            tupla_Input["Start_Adress"].set("0")
         elif selected_option == "DI" or selected_option == "DO":
             valueSource = mlfb_List[2 if selected_option == "DI" else 3]
             tupla_Input["Start_Adress"].set("0")
