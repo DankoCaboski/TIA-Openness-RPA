@@ -121,7 +121,7 @@ def open_project(project_path):
     mytia = open_tia_ui()
     return mytia.Projects.OpenWithUpgrade(file_info)
 
-def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_count,Start_Adress):
+def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_count,Start_Adress, remot_count):
     try:
         if deviceType == "CONTROLLERS":
             print('Creating CPU: ', deviceName)
@@ -137,14 +137,14 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
         elif deviceType == "REMOTAS":
             print('Creating CPU: ', deviceName)
             config_Plc = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
-            deviceCPU = myproject.UngroupedDevicesGroup.Devices.CreateWithItem(config_Plc, deviceName, deviceName)
+            deviceREMOTA = myproject.UngroupedDevicesGroup.Devices.CreateWithItem(config_Plc, deviceName, deviceName)
             count = myproject.UngroupedDevicesGroup.Devices.Count
             Count = count - 1
             Device = myproject.UngroupedDevicesGroup.Devices[Count]
-            print("(********************)",Device, "****************************************" )
             networkIterface = get_network_interface_REMOTAS(Device)
             Node = networkIterface.Nodes[0]
             address = Node.SetAttribute("Address", String(Start_Adress))
+            return deviceREMOTA
         elif deviceType == "IHM":
             print("Creating IHM: ", deviceName)
             config_Hmi = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
@@ -161,36 +161,51 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
             print('Creating IO Node: ', deviceName)
             confing_IOnode = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
             plcRef = plc_count - 1
+            remotaRef = remot_count - 1
             Devices = myproject.Devices[plcRef]
-            typeName = Devices.GetAttribute("TypeName")
-            if typeName == "ET 200SP-Station":
-                countFINAL = Devices.DeviceItems.Count
-                count = countFINAL - 1 
-            elif typeName == "ET 200S station":
-                countFINAL = Devices.DeviceItems.Count
-                count = countFINAL + 2
-            else:
-                count = Devices.DeviceItems.Count
-            DeviceItemAssociation = Devices.GetAttribute("Items")
-            if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):
-                IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
+            Remota = myproject.UngroupedDevicesGroup.Devices.Count
+            if Remota  == 0: 
+                typeName = Devices.GetAttribute("TypeName")
                 if typeName == "ET 200SP-Station":
-                    Start_Adress_int = int(Start_Adress)
-                    addressController = Devices.DeviceItems[countFINAL].DeviceItems[0].Addresses[0]
-                    StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress_int))
-                    GETStartAddress = addressController.GetAttribute("StartAddress")
+                    countFINAL = Devices.DeviceItems.Count
+                    count = countFINAL - 1 
                 elif typeName == "ET 200S station":
-                    addressController = Devices.DeviceItems[countFINAL].DeviceItems[0].Addresses[0]
-                    Start_Adress_int = int(Start_Adress)
-                    StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress_int))
-                    GETStartAddress = addressController.GetAttribute("StartAddress")
+                    countFINAL = Devices.DeviceItems.Count
+                    count = countFINAL + 2
                 else:
-                    addressController = Devices.DeviceItems[count].DeviceItems[0].Addresses[0]
+                    count = Devices.DeviceItems.Count
+                DeviceItemAssociation = Devices.GetAttribute("Items")
+                if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):
+                    IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
+                    if typeName == "ET 200SP-Station":
+                        Start_Adress_int = int(Start_Adress)
+                        addressController = Devices.DeviceItems[countFINAL].DeviceItems[0].Addresses[0]
+                        StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress_int))
+                        GETStartAddress = addressController.GetAttribute("StartAddress")
+                    elif typeName == "ET 200S station":
+                        addressController = Devices.DeviceItems[countFINAL].DeviceItems[0].Addresses[0]
+                        Start_Adress_int = int(Start_Adress)
+                        StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress_int))
+                        GETStartAddress = addressController.GetAttribute("StartAddress")
+                    else:
+                        addressController = Devices.DeviceItems[count].DeviceItems[0].Addresses[0]
+                        Start_Adress_int = int(Start_Adress)
+                        StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress_int))
+                        GETStartAddress = addressController.GetAttribute("StartAddress")
+                        print("Address Start: " , GETStartAddress )
+            else:
+                remotas = myproject.UngroupedDevicesGroup.Devices[remotaRef]
+                countFinal = remotas.DeviceItems.Count
+                count = countFinal - 2
+                DeviceItemAssociation = remotas.GetAttribute("Items")
+                if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):
+                    IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
+                    addressController = remotas.DeviceItems[count].DeviceItems[0].Addresses[0]
                     Start_Adress_int = int(Start_Adress)
                     StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress_int))
                     GETStartAddress = addressController.GetAttribute("StartAddress")
                     print("Address Start: " , GETStartAddress )
-                return IONode
+            return IONode
             
             
     except Exception as e:

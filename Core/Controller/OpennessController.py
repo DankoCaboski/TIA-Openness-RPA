@@ -83,6 +83,7 @@ def addHardware(hardware):
     deviceMlfb = ''
 
     plc_count = 0
+    remot_count = 0
     for device in hardware:
         deviceName = device["Name"]
         deviceMlfb = device["Mlfb"]
@@ -90,10 +91,11 @@ def addHardware(hardware):
         deviceVersion = device["Firm_Version"]
         Start_Adress = device ["Start_Adress"]
         
-        if deviceType == "CONTROLLERS" or deviceType == "REMOTAS" :
+        if deviceType == "CONTROLLERS":
             plc_count += 1
-      
-        hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject,deviceVersion, plc_count, Start_Adress ))
+        elif deviceType == "REMOTAS":
+            remot_count += 1
+        hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject,deviceVersion, plc_count, Start_Adress, remot_count ))
     
 def wire_profinet():
     global RPA_status
