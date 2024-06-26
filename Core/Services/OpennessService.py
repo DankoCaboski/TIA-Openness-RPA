@@ -134,7 +134,17 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
             Node = networkIterface.Nodes[0]
             address = Node.SetAttribute("Address", String(Start_Adress))
             return deviceCPU
-            
+        elif deviceType == "REMOTAS":
+            print('Creating CPU: ', deviceName)
+            config_Plc = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
+            deviceCPU = myproject.UngroupedDevicesGroup.Devices.CreateWithItem(config_Plc, deviceName, deviceName)
+            count = myproject.UngroupedDevicesGroup.Devices.Count
+            Count = count - 1
+            Device = myproject.UngroupedDevicesGroup.Devices[Count]
+            print("(********************)",Device, "****************************************" )
+            networkIterface = get_network_interface_REMOTAS(Device)
+            Node = networkIterface.Nodes[0]
+            address = Node.SetAttribute("Address", String(Start_Adress))
         elif deviceType == "IHM":
             print("Creating IHM: ", deviceName)
             config_Hmi = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
@@ -210,7 +220,10 @@ def GetAllProfinetInterfaces(myproject):
             else:
                 RPA_status = 'Device' + str(device.GetAttribute("Name")) + ' is GSD: '
                 print(RPA_status)
-                
+
+        for device in myproject.UngroupedDevicesGroup.Devices:
+                network_interface_remota = get_network_interface_REMOTAS(device)
+                network_ports.append(network_interface_remota)
         return network_ports
 
     except Exception as e:
@@ -259,6 +272,13 @@ def get_network_interface_IHM(deviceComposition):
     for option in hmi:
         optionName = option.GetAttribute("Name")
         if optionName == "PROFINET Interface_1":
+            return get_service(hwf.NetworkInterface, option)
+        
+def get_network_interface_REMOTAS(deviceComposition):
+    cpu = getCompositionPosition(deviceComposition)[1].DeviceItems
+    for option in cpu:
+        optionName = option.GetAttribute("Name")
+        if optionName == "PROFINET interface":
             return get_service(hwf.NetworkInterface, option)
         
 def is_gsd(device):

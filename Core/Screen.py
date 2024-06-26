@@ -128,7 +128,7 @@ def AddHardware():
     mlfb_combobox.grid(row=NHardware + 1, column=1, padx=5)
 
     def validate_address_input(P):
-        if tupla_Input["combobox"].get() == "CONTROLLERS" or tupla_Input["combobox"].get() == "IHM":
+        if tupla_Input["combobox"].get() == "CONTROLLERS" or tupla_Input["combobox"].get() == "IHM" or tupla_Input["combobox"].get() == "REMOTAS":
             return re.match(r'^\d{0,3}(\.\d{0,3}){0,3}(\.\d{0,2})?$', P) is not None
         
         elif tupla_Input["combobox"].get() == "DI" or tupla_Input["combobox"].get() == "DO":
@@ -151,6 +151,9 @@ def AddHardware():
             valueSource = mlfb_List[2 if selected_option == "DI" else 3]
             tupla_Input["Start_Adress"].set("0")
             special_entry.grid()
+        elif selected_option == "REMOTAS":
+            valueSource = mlfb_List[4]
+            tupla_Input["Start_Adress"].set("192.168.0.01")
         else:
             valueSource = []
 
@@ -215,19 +218,20 @@ InfoHardware = []
 RAP_status_Tela = "Idle"
 screen_instance = False
 screen_frames = []
-opcoes_Hardware = ["CONTROLLERS", "IHM", "DI", "DO"]
+opcoes_Hardware = ["CONTROLLERS", "IHM", "DI", "DO", "REMOTAS"]
 firm_versions = {}
 selected_version = None
 mlfb_Plc = []
 mlfb_ihm = []
 mlfb_DI = []
 mlfb_DO = []
+mlfb_remotas = []
 rb_blocks_value = 0
 mg_blocks_value = 0
 selec_blocks_value = 0
 CPU_list = []
 IO_List = []
-mlfb_List=[mlfb_Plc, mlfb_ihm, mlfb_DI, mlfb_DO]
+mlfb_List=[mlfb_Plc, mlfb_ihm, mlfb_DI, mlfb_DO, mlfb_remotas]
 
 ############### SCREEN ################
 def main_screen():
