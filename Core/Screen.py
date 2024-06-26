@@ -128,10 +128,10 @@ def AddHardware():
     mlfb_combobox.grid(row=NHardware + 1, column=1, padx=5)
 
     def validate_address_input(P):
-        if tupla_Input["combobox"].get() == "CONTROLLERS" or "IHM" :
+        if tupla_Input["combobox"].get() == "CONTROLLERS" or tupla_Input["combobox"].get() == "IHM":
             return re.match(r'^\d{0,3}(\.\d{0,3}){0,3}(\.\d{0,2})?$', P) is not None
         
-        elif tupla_Input["combobox"].get() == "DI" or "DO":
+        elif tupla_Input["combobox"].get() == "DI" or tupla_Input["combobox"].get() == "DO":
             return re.match(r'^\d{0,5}?$', P) is not None
         else:
             return P.isdigit()
