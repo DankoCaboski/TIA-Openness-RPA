@@ -121,7 +121,7 @@ def open_project(project_path):
     mytia = open_tia_ui()
     return mytia.Projects.OpenWithUpgrade(file_info)
 
-def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_count,Start_Adress, remot_count):
+def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_count,Start_Adress):
     try:
         if deviceType == "CONTROLLERS":
             print('Creating CPU: ', deviceName)
@@ -158,13 +158,12 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
             return deviceIHM
 
         elif deviceType == "DI" or deviceType == "DO":
-            print('Creating IO Node: ', deviceName)
-            confing_IOnode = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
-            plcRef = plc_count - 1
-            remotaRef = remot_count - 1
-            Devices = myproject.Devices[plcRef]
             Remota = myproject.UngroupedDevicesGroup.Devices.Count
             if Remota  == 0: 
+                print('Creating IO Node: ', deviceName)
+                confing_IOnode = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
+                plcRef = plc_count - 1
+                Devices = myproject.Devices[plcRef]
                 typeName = Devices.GetAttribute("TypeName")
                 if typeName == "ET 200SP-Station":
                     countFINAL = Devices.DeviceItems.Count
@@ -193,19 +192,33 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
                         StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress_int))
                         GETStartAddress = addressController.GetAttribute("StartAddress")
                         print("Address Start: " , GETStartAddress )
-            else:
+                        return IONode  
+    except Exception as e:
+        RPA_status = 'Unknown hardware type: ', deviceType
+        print(RPA_status)
+        RPA_status = 'Error creating hardware: ', e
+        print(RPA_status)
+        
+def addIORemota(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,Start_Adress, remot_count):
+    try:
+        if deviceType == "DI" or deviceType == "DO":
+            print('Creating IO Node Remota: ', deviceName)
+            confing_IOnode = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
+            remotaRef = remot_count - 1
+            Remota = myproject.UngroupedDevicesGroup.Devices.Count
+            if Remota  > 0: 
                 remotas = myproject.UngroupedDevicesGroup.Devices[remotaRef]
                 countFinal = remotas.DeviceItems.Count
                 count = countFinal - 2
                 DeviceItemAssociation = remotas.GetAttribute("Items")
-                if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):
-                    IONode = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
+                if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):              
+                    IONodeRemota = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
                     addressController = remotas.DeviceItems[count].DeviceItems[0].Addresses[0]
                     Start_Adress_int = int(Start_Adress)
                     StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress_int))
                     GETStartAddress = addressController.GetAttribute("StartAddress")
                     print("Address Start: " , GETStartAddress )
-            return IONode
+                return IONodeRemota
             
             
     except Exception as e:
@@ -213,7 +226,8 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
         print(RPA_status)
         RPA_status = 'Error creating hardware: ', e
         print(RPA_status)
-        
+ 
+
 def GetAllProfinetInterfaces(myproject):
     RPA_status = 'Getting PROFINET interfaces'
     print(RPA_status)

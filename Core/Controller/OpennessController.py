@@ -11,6 +11,7 @@ import tkinter as tk
 RPA_status = "Idle"
 hardwareList = []
 redes = []
+hardwareListRemota = []
 myproject = None
 
 def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blocks_value, selec_blocks_value):
@@ -35,6 +36,7 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
             wire_profinet()
             redes.append(create_IO_System())
             connect_IO_System(hardware, redes)
+            addIORemota(hardware)
             myproject.Save()
         
         for device in hardware:    
@@ -70,7 +72,7 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
         #         print(import_block)
 
         myproject.Save()
-        
+        redes.clear()
         RPA_status = 'Project created successfully!'
         print(RPA_status)
         
@@ -87,7 +89,6 @@ def addHardware(hardware):
     deviceMlfb = ''
 
     plc_count = 0
-    remot_count = 0
     for device in hardware:
         deviceName = device["Name"]
         deviceMlfb = device["Mlfb"]
@@ -97,9 +98,24 @@ def addHardware(hardware):
         
         if deviceType == "CONTROLLERS":
             plc_count += 1
-        elif deviceType == "REMOTAS":
+        hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject,deviceVersion, plc_count, Start_Adress))
+
+def addIORemota(hardware):
+    deviceName = ''
+    deviceMlfb = ''
+
+    remot_count = 0
+    for device in hardware:
+        deviceName = device["Name"]
+        deviceMlfb = device["Mlfb"]
+        deviceType = device["HardwareType"]
+        deviceVersion = device["Firm_Version"]
+        Start_Adress = device ["Start_Adress"]
+        
+        if deviceType == "REMOTAS":
             remot_count += 1
-        hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject,deviceVersion, plc_count, Start_Adress, remot_count ))
+        if remot_count > 0:
+            hardwareListRemota.append(OpennessService.addIORemota(deviceType, deviceName, deviceMlfb, myproject,deviceVersion, Start_Adress, remot_count ))
     
 def wire_profinet():
     global RPA_status
@@ -136,7 +152,6 @@ def connect_IO_System(hardware, redes):
     for rede in redes:  # Loop para cada rede na lista de redes
         for device in hardware:
             deviceType = device["HardwareType"]
-            Start_Adress = device["Start_Adress"]
             if deviceType == "REMOTAS":
                 Devices = myproject.UngroupedDevicesGroup.Devices  # Referenciando a lista de dispositivos
                 for i, Device in enumerate(Devices):
