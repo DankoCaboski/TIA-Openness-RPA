@@ -5,10 +5,12 @@ from . import StandardAxisController
 from Controller import LanguageController
 import traceback
 from System.IO import FileInfo # type: ignore
+from System import String # type: ignore
 import tkinter as tk
 
 RPA_status = "Idle"
 hardwareList = []
+redes = []
 myproject = None
 
 def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blocks_value, selec_blocks_value):
@@ -31,6 +33,8 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
         if hardware != None and myproject != None:
             addHardware(hardware)
             wire_profinet()
+            redes.append(create_IO_System())
+            connect_IO_System(hardware, redes)
             myproject.Save()
         
         for device in hardware:    
@@ -117,7 +121,29 @@ def wire_profinet():
         RPA_status = "Número de interfaces PROFINET menor que 2"
         print(RPA_status)
 
+def create_IO_System():
+    Device = myproject.Devices[0]
+    networkIterface = OpennessService.get_network_interface_CPU(Device)
+    redeIO = networkIterface.IoControllers[0]
+    nomerede = "PROFINET IO-System"
+    RPA_status = "Rede IO Criada"
+    print(RPA_status)
+    rede = redeIO.CreateIoSystem(nomerede)
+    return rede
     
+
+def connect_IO_System(hardware, redes):
+    for rede in redes:  # Loop para cada rede na lista de redes
+        for device in hardware:
+            deviceType = device["HardwareType"]
+            Start_Adress = device["Start_Adress"]
+            if deviceType == "REMOTAS":
+                Devices = myproject.UngroupedDevicesGroup.Devices  # Referenciando a lista de dispositivos
+                for i, Device in enumerate(Devices):
+                    networkInterface = OpennessService.get_network_interface_REMOTAS(Device)
+                    Io_System = networkInterface.IoConnectors[0]
+                    if Io_System.GetAttribute("ConnectedToIoSystem") == "" or Io_System.GetAttribute("ConnectedToIoSystem") == None:  # Verifica se o Io_System não está conectado
+                        connect = Io_System.ConnectToIoSystem(rede)  # Usando a rede atual do loop externo  
 def open_project(project_path):
     global RPA_status
     RPA_status = 'Opening project'
