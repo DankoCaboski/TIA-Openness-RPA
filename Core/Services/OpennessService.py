@@ -297,11 +297,13 @@ def get_network_interface_CPU(deviceComposition):
             return get_service(hwf.NetworkInterface, option)
             
 def get_network_interface_IHM(deviceComposition):
-    hmi = getCompositionPosition(deviceComposition)[2].DeviceItems
-    for option in hmi:
-        optionName = option.GetAttribute("Name")
-        if optionName == "PROFINET Interface_1":
-            return get_service(hwf.NetworkInterface, option)
+    hmiItems = getCompositionPosition(deviceComposition)
+    for items in hmiItems:
+        hmi = items.DeviceItems
+        for option in hmi:
+            optionName = option.GetAttribute("Name")
+            if optionName == "PROFINET Interface_1":
+                return get_service(hwf.NetworkInterface, option)
         
 def get_network_interface_REMOTAS(deviceComposition):
     cpu = getCompositionPosition(deviceComposition)[1].DeviceItems

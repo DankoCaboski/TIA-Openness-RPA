@@ -41,29 +41,31 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
         
         for device in hardware:    
             deviceName = device["Name"]
-            device = OpennessService.get_device_by_name(myproject, deviceName)
-            OpennessService.create_group(device, "01_Sistema", None)
-
-            StandardAxisController.create_standard_structure(myproject, device)
-
-            OpennessService.create_group(device, "03_Blocos Operacionais", None)
-            OpennessService.create_group(device, "04_Safety", None)
-
-        if rb_blocks_value > 0 : 
-            for device in hardware:
-                deviceName = device["Name"]
+            deviceType = device["HardwareType"]
+            if deviceType == "CONTROLLERS":
                 device = OpennessService.get_device_by_name(myproject, deviceName)
-                RobotController.create_robot_structure(myproject, device, "nome_robo", "abb")
-                
-                # tipo = 'robo'
-                # import_block = OpennessService.verify_and_import(myproject, deviceName, r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\db_falhas.xml", repetitions= rb_blocks_value, tipo = tipo)
-                # print(import_block)
+                OpennessService.create_group(device, "01_Sistema", None)
 
-        if mg_blocks_value > 0:
-            for device in hardware:
-                deviceName = device["Name"]
-                device = OpennessService.get_device_by_name(myproject, deviceName)
-                MesaGiratoriaController.create_mesa_structure(myproject, device, "Mesa Giratória", "", mg_blocks_value)
+                StandardAxisController.create_standard_structure(myproject, device)
+
+                OpennessService.create_group(device, "03_Blocos Operacionais", None)
+                OpennessService.create_group(device, "04_Safety", None)
+
+                if rb_blocks_value > 0 : 
+                    for device in hardware:
+                        deviceName = device["Name"]
+                        device = OpennessService.get_device_by_name(myproject, deviceName)
+                        RobotController.create_robot_structure(myproject, device, "nome_robo", "abb")
+                        
+                        # tipo = 'robo'
+                        # import_block = OpennessService.verify_and_import(myproject, deviceName, r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\db_falhas.xml", repetitions= rb_blocks_value, tipo = tipo)
+                        # print(import_block)
+
+                if mg_blocks_value > 0:
+                    for device in hardware:
+                        deviceName = device["Name"]
+                        device = OpennessService.get_device_by_name(myproject, deviceName)
+                        MesaGiratoriaController.create_mesa_structure(myproject, device, "Mesa Giratória", "", mg_blocks_value)
         
         # if selec_blocks_value > 0:
         #     for device in hardware:
