@@ -213,7 +213,7 @@ def addIORemota(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,Start_
                 DeviceItemAssociation = remotas.GetAttribute("Items")
                 if DeviceItemAssociation[0].CanPlugNew(confing_IOnode, deviceName, count):              
                     IONodeRemota = DeviceItemAssociation[0].PlugNew(confing_IOnode, deviceName, count)
-                    addressController = remotas.DeviceItems[count].DeviceItems[0].Addresses[0]
+                    addressController = remotas.DeviceItems[countFinal].DeviceItems[0].Addresses[0]
                     Start_Adress_int = int(Start_Adress)
                     StartAddress = addressController.SetAttribute("StartAddress", Int32(Start_Adress_int))
                     GETStartAddress = addressController.GetAttribute("StartAddress")
