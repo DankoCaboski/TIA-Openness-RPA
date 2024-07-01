@@ -37,6 +37,7 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
             redes.append(create_IO_System())
             connect_IO_System(hardware, redes)
             addIORemota(hardware)
+            import_libraries(mytia)
             myproject.Save()
         
         for device in hardware:    
@@ -141,13 +142,15 @@ def wire_profinet():
 
 def create_IO_System():
     Device = myproject.Devices[0]
-    networkIterface = OpennessService.get_network_interface_CPU(Device)
-    redeIO = networkIterface.IoControllers[0]
-    nomerede = "PROFINET IO-System"
-    RPA_status = "Rede IO Criada"
-    print(RPA_status)
-    rede = redeIO.CreateIoSystem(nomerede)
-    return rede
+    count = myproject.UngroupedDevicesGroup.Devices.Count
+    if count >= 1:
+        networkIterface = OpennessService.get_network_interface_CPU(Device)
+        redeIO = networkIterface.IoControllers[0]
+        nomerede = "PROFINET IO-System"
+        rede = redeIO.CreateIoSystem(nomerede)
+        RPA_status = "Rede IO Criada"
+        print(RPA_status)
+        return rede
     
 
 def connect_IO_System(hardware, redes):
@@ -218,5 +221,23 @@ def export_data_type(device, data_type_name : str, data_type_path : str):
         RPA_status = 'Error exporting data type while in controller: ', e
         print(RPA_status)
         return
-        
-    
+def import_libraries(mytia):
+    biblioteca = OpennessService.get_file_info(r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\Library")
+    OpenGlobalLibrary = mytia.GlobalLibraries.Open(biblioteca, OpennessService.tia.OpenMode.ReadWrite)
+    enumLibrary =  OpenGlobalLibrary.TypeFolder.Folders
+    projectLib = myproject.ProjectLibrary
+    for folder in enumLibrary:
+        # Verifica se 'Types' não está vazio antes de tentar acessar um índice
+        try:
+            updateLibrary = folder.Types[0].UpdateLibrary(projectLib)
+            nameFolderEnum = OpennessService.get_attibutes(["Name"], folder)
+            nameFolder = nameFolderEnum[0]
+            print('update library:', nameFolder)
+        except IndexError:
+            # Ocorre se não houver itens em Types
+            print('Erro: Não há tipos disponíveis em', folder)
+        except Exception as e:
+            # Captura outras exceções que podem ocorrer no processo
+            print('Erro ao atualizar a biblioteca:', e)
+    CloseGlobalLibrary = mytia.GlobalLibraries[0].Close()
+    print("Close Library:", CloseGlobalLibrary)
