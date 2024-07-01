@@ -7,6 +7,7 @@ import traceback
 from System.IO import FileInfo # type: ignore
 from System import String # type: ignore
 import tkinter as tk
+import os
 
 RPA_status = "Idle"
 hardwareList = []
@@ -38,6 +39,7 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
             connect_IO_System(hardware, redes)
             addIORemota(hardware)
             import_libraries(mytia)
+            import_graphics(myproject)
             myproject.Save()
         
         for device in hardware:    
@@ -76,6 +78,13 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
 
         myproject.Save()
         redes.clear()
+        #for device in hardware:    
+        #    deviceName = device["Name"]
+        #    deviceType = device["HardwareType"]
+        #    if deviceType == "IHM":
+         #       ihm = OpennessService.get_SoftwareContainer_IHM(device)
+        #        print(ihm)
+        #        grupos = ihm.ScreenFolder
         RPA_status = 'Project created successfully!'
         print(RPA_status)
         
@@ -224,6 +233,7 @@ def export_data_type(device, data_type_name : str, data_type_path : str):
 def import_libraries(mytia):
     biblioteca = OpennessService.get_file_info(r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\Library")
     OpenGlobalLibrary = mytia.GlobalLibraries.Open(biblioteca, OpennessService.tia.OpenMode.ReadWrite)
+    print("Open Library")
     enumLibrary =  OpenGlobalLibrary.TypeFolder.Folders
     projectLib = myproject.ProjectLibrary
     for folder in enumLibrary:
@@ -240,4 +250,18 @@ def import_libraries(mytia):
             # Captura outras exceções que podem ocorrer no processo
             print('Erro ao atualizar a biblioteca:', e)
     CloseGlobalLibrary = mytia.GlobalLibraries[0].Close()
-    print("Close Library:", CloseGlobalLibrary)
+    print("Close Library")
+
+def import_graphics(myproject):
+    # Define o caminho do diretório onde estão os arquivos .xml
+    directory_path = r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\IHM\Graphic"
+    # Lista todos os arquivos que terminam com '.xml' no diretório especificado
+    arquivos_xml = [f for f in os.listdir(directory_path) if f.endswith('.xml')]
+    for arquivo in arquivos_xml:
+        # Constrói o caminho completo para cada arquivo .xml
+        full_path = os.path.join(directory_path, arquivo)
+        # Obtém as informações do arquivo através do caminho completo
+        arquivoFile = OpennessService.get_file_info(full_path)
+        import_options = OpennessService.tia.ImportOptions.Override
+        import_graph = myproject.Graphics.Import(arquivoFile, import_options)
+        print("Import graphic done")

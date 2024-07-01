@@ -311,7 +311,15 @@ def get_network_interface_REMOTAS(deviceComposition):
         optionName = option.GetAttribute("Name")
         if optionName == "PROFINET interface":
             return get_service(hwf.NetworkInterface, option)
-        
+
+def get_SoftwareContainer_IHM(deviceComposition):
+    hmiItems = getCompositionPosition(deviceComposition)
+    for option in hmiItems:
+        optionName = option.GetAttribute("Name")
+        if "HMI_RT" in optionName:
+            print("A palavra contém 'HMI_RT'")
+            return get_service(hwf.SoftwareContainer, option)
+                
 def is_gsd(device):
     try:
         if device.GetAttribute("IsGsd") == True:
