@@ -2,6 +2,7 @@ from Services import OpennessService
 from . import RobotController
 from . import MesaGiratoriaController
 from . import StandardAxisController
+from . import IHMController
 from Controller import LanguageController
 import traceback
 from System.IO import FileInfo # type: ignore
@@ -69,7 +70,13 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
                         deviceName = device["Name"]
                         device = OpennessService.get_device_by_name(myproject, deviceName)
                         MesaGiratoriaController.create_mesa_structure(myproject, device, "Mesa Giratória", "", mg_blocks_value)
-        
+            RPA_status = "Blocos Importados"
+            print(RPA_status)
+            if deviceType == "IHM":
+                deviceName = device["Name"]
+                device = OpennessService.get_device_by_name(myproject, deviceName)
+                ihm = OpennessService.get_SoftwareContainer_IHM(device).Software
+                IHMController.create_IHM_structure(myproject, ihm)
         # if selec_blocks_value > 0:
         #     for device in hardware:
         #         deviceName = device["Name"]
@@ -77,14 +84,7 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
         #         print(import_block)
 
         myproject.Save()
-        redes.clear()
-        #for device in hardware:    
-        #    deviceName = device["Name"]
-        #    deviceType = device["HardwareType"]
-        #    if deviceType == "IHM":
-         #       ihm = OpennessService.get_SoftwareContainer_IHM(device)
-        #        print(ihm)
-        #        grupos = ihm.ScreenFolder
+        redes.clear()  
         RPA_status = 'Project created successfully!'
         print(RPA_status)
         
@@ -264,4 +264,4 @@ def import_graphics(myproject):
         arquivoFile = OpennessService.get_file_info(full_path)
         import_options = OpennessService.tia.ImportOptions.Override
         import_graph = myproject.Graphics.Import(arquivoFile, import_options)
-        print("Import graphic done")
+    print("Import graphic done")

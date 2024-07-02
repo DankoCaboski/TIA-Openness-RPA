@@ -313,11 +313,10 @@ def get_network_interface_REMOTAS(deviceComposition):
             return get_service(hwf.NetworkInterface, option)
 
 def get_SoftwareContainer_IHM(deviceComposition):
-    hmiItems = getCompositionPosition(deviceComposition)
+    hmiItems = deviceComposition.DeviceItems
     for option in hmiItems:
         optionName = option.GetAttribute("Name")
         if "HMI_RT" in optionName:
-            print("A palavra contém 'HMI_RT'")
             return get_service(hwf.SoftwareContainer, option)
                 
 def is_gsd(device):
@@ -408,6 +407,16 @@ def recursive_folder_search(groups, group_name):
     except Exception as e:
         print('Error searching group:', e)
 
+def create_folder(device, group_name, parent_group):
+    try:
+        groups = device.ScreenFolder.Folders
+        if not parent_group:
+            return groups.Create(group_name)
+        else:
+            return recursive_folder_search(groups, parent_group).Groups.Create(group_name)
+            
+    except Exception as e:
+        print('Error creating group:', e)
 
 def create_group(device, group_name, parent_group):
     try:
