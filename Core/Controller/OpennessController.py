@@ -39,6 +39,7 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
             redes.append(create_IO_System())
             connect_IO_System(hardware, redes)
             addIORemota(hardware)
+            myproject.Save()
             import_libraries(mytia)
             import_graphics(myproject)
             myproject.Save()
@@ -253,6 +254,7 @@ def import_libraries(mytia):
     print("Close Library")
 
 def import_graphics(myproject):
+    print("Import graphic start")
     # Define o caminho do diretório onde estão os arquivos .xml
     directory_path = r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\IHM\Graphic"
     # Lista todos os arquivos que terminam com '.xml' no diretório especificado
