@@ -393,6 +393,20 @@ def SetSubnetName(myproject):
     return myproject.Subnets.Create("System:Subnet.Ethernet", "NewSubnet")
 
 
+def recursive_group_search(groups, group_name):
+    
+    try:
+        found = groups.Find(group_name)
+        if found:
+            return found
+        
+        for group in groups.GetEnumerator():
+            found = recursive_group_search(group.Groups, group_name)
+            if found:
+                return found
+    except Exception as e:
+        print('Error searching group:', e)
+
 def recursive_folder_search(groups, group_name):
     
     try:
@@ -401,7 +415,7 @@ def recursive_folder_search(groups, group_name):
             return found
         
         for group in groups.GetEnumerator():
-            found = recursive_folder_search(group.Groups, group_name)
+            found = recursive_folder_search(group.Folders, group_name)
             if found:
                 return found
     except Exception as e:
@@ -413,7 +427,7 @@ def create_folder(device, group_name, parent_group):
         if not parent_group:
             return groups.Create(group_name)
         else:
-            return recursive_folder_search(groups, parent_group).Groups.Create(group_name)
+            return recursive_folder_search(groups, parent_group).Folders.Create(group_name)
             
     except Exception as e:
         print('Error creating group:', e)
@@ -425,7 +439,7 @@ def create_group(device, group_name, parent_group):
         if not parent_group:
             return groups.Create(group_name)
         else:
-            return recursive_folder_search(groups, parent_group).Groups.Create(group_name)
+            return recursive_group_search(groups, parent_group).Groups.Create(group_name)
             
     except Exception as e:
         print('Error creating group:', e)

@@ -78,6 +78,8 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
                 device = OpennessService.get_device_by_name(myproject, deviceName)
                 ihm = OpennessService.get_SoftwareContainer_IHM(device).Software
                 IHMController.create_IHM_structure(myproject, ihm)
+            RPA_status = "Telas Importadas"
+            print(RPA_status)
         # if selec_blocks_value > 0:
         #     for device in hardware:
         #         deviceName = device["Name"]
