@@ -432,6 +432,17 @@ def create_folder(device, group_name, parent_group):
     except Exception as e:
         print('Error creating group:', e)
 
+def create_folder_tag(device, group_name, parent_group):
+    try:
+        groups = device.TagFolder.Folders
+        if not parent_group:
+            return groups.Create(group_name)
+        else:
+            return recursive_folder_search(groups, parent_group).Folders.Create(group_name)
+            
+    except Exception as e:
+        print('Error creating group:', e)
+
 def create_group(device, group_name, parent_group):
     try:
         plc_software = get_software(device)

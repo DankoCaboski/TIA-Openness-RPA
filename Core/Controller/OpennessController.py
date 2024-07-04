@@ -9,6 +9,8 @@ from System.IO import FileInfo # type: ignore
 from System import String # type: ignore
 import tkinter as tk
 import os
+import pygetwindow as gw
+import pyautogui
 
 RPA_status = "Idle"
 hardwareList = []
@@ -39,9 +41,11 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
             redes.append(create_IO_System())
             connect_IO_System(hardware, redes)
             addIORemota(hardware)
+            redes.clear()  
             myproject.Save()
             import_libraries(mytia)
             import_graphics(myproject)
+            create_connection(project_path, project_name)
             myproject.Save()
         
         for device in hardware:    
@@ -71,15 +75,15 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
                         deviceName = device["Name"]
                         device = OpennessService.get_device_by_name(myproject, deviceName)
                         MesaGiratoriaController.create_mesa_structure(myproject, device, "Mesa Giratória", "", mg_blocks_value)
-            RPA_status = "Blocos Importados"
-            print(RPA_status)
+                RPA_status = "Blocos Importados"
+                print(RPA_status)
             if deviceType == "IHM":
                 deviceName = device["Name"]
                 device = OpennessService.get_device_by_name(myproject, deviceName)
                 ihm = OpennessService.get_SoftwareContainer_IHM(device).Software
                 IHMController.create_IHM_structure(myproject, ihm)
-            RPA_status = "Telas Importadas"
-            print(RPA_status)
+                RPA_status = "Telas Importadas"
+                print(RPA_status)
         # if selec_blocks_value > 0:
         #     for device in hardware:
         #         deviceName = device["Name"]
@@ -87,7 +91,6 @@ def create_project(project_path, project_name, hardware, rb_blocks_value, mg_blo
         #         print(import_block)
 
         myproject.Save()
-        redes.clear()  
         RPA_status = 'Project created successfully!'
         print(RPA_status)
         
@@ -153,7 +156,7 @@ def wire_profinet():
         print(RPA_status)
 
 def create_IO_System():
-    Device = myproject.Devices[0]
+    Device = myproject.Devices[1]
     count = myproject.UngroupedDevicesGroup.Devices.Count
     if count >= 1:
         networkIterface = OpennessService.get_network_interface_CPU(Device)
@@ -269,3 +272,41 @@ def import_graphics(myproject):
         import_options = OpennessService.tia.ImportOptions.Override
         import_graph = myproject.Graphics.Import(arquivoFile, import_options)
     print("Import graphic done")
+
+def create_connection(project_path, project_name):
+    network = OpennessService.tia.HW.View.Network
+    myproject.ShowHwEditor(network)
+    # Encontrar a janela pelo título
+    direct_path = os.path.normpath(project_path)
+    windows_path = os.path.join(direct_path, project_name, project_name, project_name)
+    print('path:', windows_path)
+    windows = gw.getWindowsWithTitle(windows_path)[0]
+
+    if windows:
+        window = windows
+        # Ativar a janela e trazê-la para o foco
+        window.activate()
+
+
+        # Esperar um momento para garantir que a janela está ativa
+        pyautogui.sleep(1)
+        window.maximize()
+        pyautogui.sleep(1)
+        #Move o mouse para uma posição
+        pyautogui.click(window.left + 9, window.top + 150)
+        pyautogui.sleep(1)
+        pyautogui.click(window.left + 150, window.top + 150)
+        pyautogui.moveTo(window.left + 150, window.top + 230)
+        pyautogui.sleep(1)
+        pyautogui.dragTo(window.left + 370, window.top + 230, 1 , button='left')
+        pyautogui.click()
+        pyautogui.sleep(1)
+        pyautogui.click(window.left + 90, window.top + 150)
+        pyautogui.sleep(1)
+        pyautogui.click(window.left + 9, window.top + 150)
+        pyautogui.sleep(1)
+        print("Automação concluída com sucesso.")
+    else:
+        print("Janela não encontrada.")
+
+    
