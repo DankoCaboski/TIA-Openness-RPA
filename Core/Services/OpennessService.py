@@ -162,8 +162,7 @@ def addHardware(deviceType, deviceName, deviceMlfb, myproject,FirmVersion,plc_co
             if Remota  == 0: 
                 print('Creating IO Node: ', deviceName)
                 confing_IOnode = "OrderNumber:"+deviceMlfb+"/"+FirmVersion
-                plcRef = plc_count - 1
-                Devices = myproject.Devices[plcRef]
+                Devices = myproject.Devices[plc_count]
                 typeName = Devices.GetAttribute("TypeName")
                 if typeName == "ET 200SP-Station":
                     countFINAL = Devices.DeviceItems.Count

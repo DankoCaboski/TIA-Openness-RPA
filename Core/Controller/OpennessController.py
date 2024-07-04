@@ -300,7 +300,7 @@ def create_connection(project_path, project_name):
         pyautogui.sleep(1)
         pyautogui.dragTo(window.left + 370, window.top + 230, 1 , button='left')
         pyautogui.click()
-        pyautogui.sleep(1)
+        pyautogui.sleep(1.5)
         pyautogui.click(window.left + 90, window.top + 150)
         pyautogui.sleep(1)
         pyautogui.click(window.left + 9, window.top + 150)
