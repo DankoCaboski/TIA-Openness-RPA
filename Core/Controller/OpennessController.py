@@ -286,26 +286,29 @@ def create_connection(project_path, project_name):
         window = windows
         # Ativar a janela e trazê-la para o foco
         window.activate()
-
-
         # Esperar um momento para garantir que a janela está ativa
         pyautogui.sleep(1)
         window.maximize()
         pyautogui.sleep(1)
-        #Move o mouse para uma posição
+        #Move o mouse para fechar aba lateral
         pyautogui.click(window.left + 9, window.top + 150)
         pyautogui.sleep(1)
+        #Clica em Connections
         pyautogui.click(window.left + 150, window.top + 150)
+        #Move o mouse para cima da IHM
         pyautogui.moveTo(window.left + 150, window.top + 230)
         pyautogui.sleep(1)
+        #Arrasta o mouse para o PLC 1
         pyautogui.dragTo(window.left + 370, window.top + 230, 1 , button='left')
         pyautogui.click()
         pyautogui.sleep(1.5)
+        #Clica em Network
         pyautogui.click(window.left + 90, window.top + 150)
         pyautogui.sleep(1)
+        #Move o mouse para abrir aba lateral
         pyautogui.click(window.left + 9, window.top + 150)
         pyautogui.sleep(1)
-        print("Automação concluída com sucesso.")
+        print("Automação de usuaria concluída.")
     else:
         print("Janela não encontrada.")
 

@@ -1,14 +1,13 @@
 import sys
 sys.coinit_flags = 2
 import os
-import pywinauto
 import tkinter as tk
 from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
 import re
 from repositories import UserConfig, MlfbManagement
 from Controller.OpennessController import open_project, export_data_type, export_block
-from Services.OpennessService import add_DLL, configurePath
+from Services.OpennessService import add_DLL
 import os
 import Controller.OpennessController as OpennessController
 

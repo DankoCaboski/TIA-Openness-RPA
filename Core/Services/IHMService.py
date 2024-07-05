@@ -1,6 +1,4 @@
 from . import OpennessService
-from . import UDTService
-import time
 import os
 dependencies = r"\\AXIS-SERVER\Users\Axis Server\Documents\xmls\dependence"
 
