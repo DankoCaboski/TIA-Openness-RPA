@@ -25,10 +25,10 @@ def create_mesa_structure(myproject, device, mesa_name, mesa_type, mg_blocks_val
     import_mesa_bk(myproject, device, cmd_name_group.Blocks, mesa_type, file_paths_CMD)
 
     mesas = {
-        1: ('Mesa A', list_files_in_directory(directory_path_A), import_mesa, list_files_in_directory(directory_path_A_prod), import_mesa_prod),
-        2: ('Mesa B', list_files_in_directory(directory_path_B), import_mesa, list_files_in_directory(directory_path_B_prod), import_mesa_prod),
-        3: ('Mesa C', list_files_in_directory(directory_path_C), import_mesa, list_files_in_directory(directory_path_C_prod), import_mesa_prod),
-        4: ('Mesa D', list_files_in_directory(directory_path_D), import_mesa, list_files_in_directory(directory_path_D_prod), import_mesa_prod)
+        1: ('Lado A', list_files_in_directory(directory_path_A), import_mesa, list_files_in_directory(directory_path_A_prod), import_mesa_prod),
+        2: ('Lado B', list_files_in_directory(directory_path_B), import_mesa, list_files_in_directory(directory_path_B_prod), import_mesa_prod),
+        3: ('Lado C', list_files_in_directory(directory_path_C), import_mesa, list_files_in_directory(directory_path_C_prod), import_mesa_prod),
+        4: ('Lado D', list_files_in_directory(directory_path_D), import_mesa, list_files_in_directory(directory_path_D_prod), import_mesa_prod)
     }
 
     for i in range(1, mg_blocks_value + 1):

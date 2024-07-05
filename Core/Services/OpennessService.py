@@ -1,4 +1,3 @@
-import signal
 import clr
 from System.IO import DirectoryInfo, FileInfo  # type: ignore
 from System import Int32, String # type: ignore
