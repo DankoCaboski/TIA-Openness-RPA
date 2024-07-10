@@ -115,6 +115,8 @@ def addHardware(hardware):
         Start_Adress = device ["Start_Adress"]
         
         if deviceType == "CONTROLLERS":
+            if "F" in deviceMlfb:
+                print("é safety")
             plc_count += 1
         hardwareList.append(OpennessService.addHardware(deviceType, deviceName, deviceMlfb, myproject,deviceVersion, plc_count, Start_Adress))
 

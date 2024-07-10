@@ -4,6 +4,7 @@ import os
 import tkinter as tk
 from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
+import pywinauto #utilizado para bug de selecionar diretório
 import re
 from repositories import UserConfig, MlfbManagement
 from Controller.OpennessController import open_project, export_data_type, export_block
